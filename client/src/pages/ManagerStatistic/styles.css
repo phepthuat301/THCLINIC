@@ -1,0 +1,47 @@
+.recharts-default-legend{
+    margin-top: 20px!important;
+}
+
+.total-statistic {
+    width: fit-content;
+    margin-left: 250px !important;
+    /* padding: 20px; */
+    background-color: #fff;
+    height: fit-content !important;
+}
+
+.ant-statistic {
+    padding: 20px
+}
+
+.total-user {
+    border: 1px dashed #f3f3f3;
+}
+
+.total-credit {
+    border: 1px dashed #f3f3f3;
+    border-left: 0;
+}
+
+.ant-statistic-title {
+    white-space: nowrap;
+}
+
+.recharts-legend-wrapper {
+    position: absolute;
+    width: 690px;
+    height: auto;
+    left: 80px;
+    bottom: -25px !important;
+    float: right;
+    padding-left: 47px;
+    display: flex;
+  }
+  
+  .chart {
+    padding-top: 40px;
+  /*   width: 100%;
+    padding-left: 20px;
+    padding-right: 20px; */
+  }
+  

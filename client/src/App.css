@@ -1,0 +1,45 @@
+/* Admin Sidebar Start */
+
+.ant-layout-sider-childrren .ant-menu-inline .ant-menu-submenu {
+  display: flex;
+}
+
+.ant-menu-vertical > .ant-menu-item, .ant-menu-vertical-left > .ant-menu-item, .ant-menu-vertical-right > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  /* padding-left: 22px; */
+}
+
+.ant-menu-submenu-title > svg {
+  font-size: 24px;
+  min-width: 1em;
+  min-height: 1em;
+}
+
+.ant-menu-submenu-title > span {
+  margin-left: 23.8px;
+}
+
+.ant-layout-sider-children > ul > li {
+  padding: 0;
+}
+
+.ant-layout-sider-children > ul > li > span > a > svg {
+  font-size: 24px;
+  margin-right: 23.4px;
+}
+
+.ant-layout-sider-children > ul > li > span > a {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.ant-layout > .ant-layout-sider > .ant-layout-content {
+  padding: 0 !important;
+}
+
+.ant-layout-content > .ant-row {
+  margin-top: 0px !important;
+}
