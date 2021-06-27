@@ -1,5 +1,5 @@
 import { Route, Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Popover, Tag, Button } from 'antd';
+import { Layout, Menu, Popover, Tag, Button, Modal } from 'antd';
 import MenuAdmin from '../MenuAdmin'
 import logo from '../../imgs/logo.png'
 import { ROUTERS } from '../../constants/router';
@@ -16,6 +16,9 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { adminCheckAction, get30daysAction, logoutAction } from '../../redux/actions';
 
+//Components
+import ResetPWD from '../resetPwdForm';
+import swal from 'sweetalert';
 
 const { Header, Content, Sider } = Layout;
 function DefaultLayout(props) {
@@ -24,10 +27,12 @@ function DefaultLayout(props) {
     const getAdminContent = useSelector(state => state.statisticReducer);
     const { checkData } = getAdminContent;
     const [isCollapse, setIsCollapse] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
     document.title = "Quản Lý | Thiện Hiếu"
 
     const getUserInfo = useSelector((state) => state.userReducer);
-    const { check } = getUserInfo;
+    const { check, email, trangthai } = getUserInfo;
     var user = JSON.parse(localStorage.getItem('user')) || {};
     useEffect(() => {
         dispatch(get30daysAction())
@@ -35,6 +40,10 @@ function DefaultLayout(props) {
     }, [user.token]);
 
     if (check === false) {
+        return <Redirect to="/login" />
+    }
+    if( trangthai !== 1){
+        swal("Tài Khoản Của Bạn Đã Bị Khóa","Vui lòng liên hệ với BOSS để biết thêm chi tiết","error")
         return <Redirect to="/login" />
     }
     function pushNotify() {
@@ -52,6 +61,11 @@ function DefaultLayout(props) {
             </>
         )
     }
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
     return (
         <Route
             exact={exact}
@@ -66,15 +80,21 @@ function DefaultLayout(props) {
                                 </div>
                                 <Menu mode="horizontal">
                                     {isCollapse ? <MenuUnfoldOutlined style={{ fontSize: '25px', marginLeft: '30px', top: '5px', position: 'relative' }} onClick={() => { setIsCollapse(false) }} /> : <MenuFoldOutlined style={{ fontSize: '25px', marginLeft: '30px', top: "5px", position: 'relative' }} onClick={() => { setIsCollapse(true) }} />}
-                                    <Button style={{ marginLeft:'20px' }} onClick={()=>{dispatch(logoutAction())}} type="ghost">Đăng Xuất</Button>
+                                    <Tag color="#ed9205" style={{ marginLeft: '50px' }}>{email}</Tag>
+
                                     <Popover placement="bottomRight" title={"Thông Báo"} content={pushNotify} trigger="click">
-                                        <GrNotification style={{ marginLeft: '400px', fontSize: '25px', top: '8px', position: 'relative', cursor: 'pointer' }} />
+                                        <GrNotification style={{ marginLeft: '50px', fontSize: '25px', top: '8px', position: 'relative', cursor: 'pointer' }} />
                                         <Badge count={checkData.length}>
                                             <a href="#" className="head-example" />
                                         </Badge>
                                     </Popover>
+                                    <Button style={{ marginLeft: '50px' }} onClick={() => { dispatch(logoutAction()) }} type="ghost">Đăng Xuất</Button>
+                                    <Button style={{ marginLeft: '50px' }} onClick={() => setIsModalVisible(true)} type="ghost">Đổi Mật Khẩu</Button>
+                                    <Modal title="Đổi Mật Khẩu" visible={isModalVisible} footer={null} onCancel={handleCancel}>
+                                        <ResetPWD email={email} setIsModalVisible={setIsModalVisible}/>
+                                    </Modal>
                                 </Menu>
-                                
+
                             </Header>
                             <Content style={{ padding: '0 50px' }}>
                                 <Layout className="site-layout-background" style={{ padding: '24px 0' }} >

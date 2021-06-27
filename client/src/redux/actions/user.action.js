@@ -177,7 +177,6 @@ export const adminCheckAction = (id) => async (dispatch) => {
   try {
     dispatch({ type: "ADMIN_CHECK_REQUEST" });
     const { data } = await axios.get(`http://14.236.55.118:3001/admincheck/${id}`);
-    console.log("1"+data)
     dispatch({
       type: "ADMIN_CHECK_SUCCESS",
       payload: data,

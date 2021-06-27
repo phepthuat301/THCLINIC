@@ -28,11 +28,11 @@ export default function ReadUser() {
             dispatch(removeUserAction())
             dispatch(removeServicesAction())
         }
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         newsForm.resetFields();
-    }, [userDetail.id_khachhang])
+    }, [userDetail.id_khachhang, newsForm])
 
     function editUser(value) {
         const newValue = {
@@ -65,9 +65,12 @@ export default function ReadUser() {
             swal("Đổi Dịch Vụ Thất Bại", "Khách Hàng Chưa Đủ Điểm Thưởng Để Đổi Dịch Vụ", "warning")
         }
         if (!newServices[0].giatichluy) {
-            dispatch(createInvoiceAction(IDKH, IDDV))
+            if (IDDV === null) {
+                swal("Vui lòng chọn dịch vụ", "", "warning")
+            } else {
+                dispatch(createInvoiceAction(IDKH, IDDV))
+            }
         }
-
     }
     ////////////////////////
 
@@ -175,7 +178,7 @@ export default function ReadUser() {
 
 
             <Drawer
-                title="Basic Drawer"
+                title="Chỉnh Sửa Khách Hàng"
                 width={720}
                 closable={false}
                 onClose={onClose}

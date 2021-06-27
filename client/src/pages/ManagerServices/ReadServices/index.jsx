@@ -17,10 +17,11 @@ export default function ReadServices() {
         return () => {
             dispatch(removeServicesAction())
         }
-    }, []);
+    }, [dispatch]);
+
     useEffect(() => {
         newsForm.resetFields();
-    }, [servicesList.id_dichvu])
+    }, [serviceDetail.id_dichvu,newsForm])
 
     const showDrawer = (id) => {
         dispatch(getServicesDetailAction(id));
@@ -127,6 +128,7 @@ export default function ReadServices() {
                     }}
                     onFinish={editServices}
                     scrollToFirstError
+                    form={newsForm}
                 >
 
                     <Form.Item

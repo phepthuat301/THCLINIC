@@ -14,6 +14,8 @@ import ExamHistory from './pages/ManagerHistory';
 import ReadOrder from './pages/ManagerOrder';
 import StatisticManager from './pages/ManagerStatistic';
 import LogIn from './pages/LogIn';
+import ReadAccount from './pages/ManagerAccount/ReadAccount';
+import AddAccount from './pages/ManagerAccount/AddAccount';
 //REACT REDUX
 
 
@@ -68,6 +70,18 @@ function BrowserRouter() {
           exact
           path={ROUTERS.STATISTIC}
           component={StatisticManager}
+        />
+        {/* Add Account*/}
+        <DefaultLayout
+          exact
+          path={ROUTERS.ADD_ACCOUNT}
+          component={AddAccount}
+        />
+        {/* Edit Account*/}
+        <DefaultLayout
+          exact
+          path={ROUTERS.READ_ACCOUNT}
+          component={ReadAccount}
         />
 
         <Route exact path="/login" component={LogIn} />

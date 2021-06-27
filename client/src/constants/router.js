@@ -8,4 +8,6 @@ export const ROUTERS = {
     READ_ORDER: '/readorder',
     STATISTIC: '/statistic',
     LOGIN: '/login',
+    READ_ACCOUNT: '/readaccount',
+    ADD_ACCOUNT: '/addaccount',
   }

@@ -4,6 +4,8 @@ const initialState = {
     userList: [],
     userDetail: {},
     check: null,
+    email: null,
+    trangthai: null,
 };
 export default function userReducer(state = initialState, action) {
     switch (action.type) {
@@ -219,14 +221,20 @@ export default function userReducer(state = initialState, action) {
             };
         case "ADMIN_CHECK_SUCCESS":
             let adminCheck
-            if (action.payload === true) {
+            let accountEmail
+            let accountStatus
+            if (action.payload.length > 0) {
                 adminCheck = true;
+                accountEmail = action.payload[0].email;
+                accountStatus = action.payload[0].trangthai
             } else {
                 adminCheck = false;
             }
             return {
                 ...state,
                 check: adminCheck,
+                email: accountEmail,
+                trangthai: accountStatus,
                 loading: false,
             };
         case "ADMIN_CHECK_FAIL":
