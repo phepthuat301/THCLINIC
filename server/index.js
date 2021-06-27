@@ -461,19 +461,15 @@ app.get("/admincheck/:id", (req, res) => {
     res.send("false")
   } else {
     db.query(
-      "select * from quantrivien where token = ?",
+      "select email,trangthai from quantrivien where token = ?",
       [id],
       (err, result) => {
         if (err) {
           console.log(err);
         } else {
           if (result.length > 0) {
-            if (result[0].role === "admin") {
-              res.send("true")
-            } else {
-              res.send("false")
-            }
-          }else{
+            res.send(result)
+          } else {
             res.send('false')
           }
         }
@@ -481,6 +477,136 @@ app.get("/admincheck/:id", (req, res) => {
     );
   }
 });
+
+//GET ACCOUNT 
+app.get("/account", (req, res) => {
+  db.query(
+    "select id_qtv,username,email,role,trangthai,token from quantrivien",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result)
+      }
+    }
+  );
+});
+
+//ADD ACCOUNT
+app.post("/addaccount", (req, res) => {
+  const username = req.body.username;
+  const role = req.body.role;
+  const email = req.body.email.toLowerCase();
+  const trangthai = req.body.trangthai;
+  db.query(
+    "Select * from quantrivien",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let check = result.some(item => item.email.toLowerCase() === email.toLowerCase() || item.username === username)
+        if (check === true) {
+          res.send('found')
+        } else {
+          db.query(
+            "INSERT INTO quantrivien (username, email, role, password, trangthai) VALUES (?,?,?,?,?)",
+            [username, email, role, "c4ca4238a0b923820dcc509a6f75849b", trangthai],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send("Values Inserted");
+              }
+            }
+          );
+        }
+      }
+    })
+})
+
+//RESET PASSWORD
+app.put("/resetpassword", (req, res) => {
+  const id_user = req.body.id_user;
+  const password = "c4ca4238a0b923820dcc509a6f75849b"
+  db.query(
+    "UPDATE quantrivien SET password = ? WHERE id_qtv = ?",
+    [password, id_user],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//EDIT ACCOUNT
+app.put("/editaccount", (req, res) => {
+  const id_qtv = req.body.id_qtv;
+  const trangthai = req.body.trangthai;
+  const role = req.body.role;
+  db.query(
+    "UPDATE quantrivien SET role = ?, trangthai = ? where id_qtv = ? ",
+    [role, trangthai, id_qtv],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("Values Updated");
+      }
+    }
+  );
+})
+
+//ADD ACCOUNT
+app.post("/getrole", (req, res) => {
+  const token = req.body.token;
+  db.query(
+    "Select token,role from quantrivien where token = ?",token,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if(result.length > 0){
+          res.send(result)
+        }else{
+          res.send("token not exist")
+        }
+      }
+    })
+})
+
+//UPDATE PASSWORD
+app.put("/updatepassword", (req, res) => {
+  const email = req.body.email;
+  const oldPass = req.body.oldPass;
+  const newPass = req.body.newPass;
+  db.query(
+    "SELECT * FROM quantrivien WHERE email = ? ", email, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if(result[0].password !== oldPass) {
+          res.send('false')
+        } else {
+          db.query(
+            "UPDATE quantrivien SET password = ? WHERE id_qtv = ?",
+            [newPass, result[0].id_qtv],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send('true');
+              }
+            }
+          );
+        }
+      }
+    }
+  );
+});
+
 
 app.listen(3001, () => {
   console.log("Yey, your server is running on port 3001");
