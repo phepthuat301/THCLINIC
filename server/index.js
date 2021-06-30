@@ -31,36 +31,39 @@ app.post("/adduser", (req, res) => {
         if (result.length > 0) {
           res.send('found')
         } else {
-          db.query(
-            "SELECT * FROM khachhang WHERE id_khachhang = ?",
-            [id_nguoigioithieu],
-            (err, result) => {
-              if (err) {
-                console.log(err);
-              } else {
-                const newSavePoint = result[0].diemtichluy + 1
-                const prPoint = result[0].nguoigioithieu + 1
-                db.query(
-                  "UPDATE khachhang SET diemtichluy = ? where id_khachhang = ? ",
-                  [newSavePoint, id_nguoigioithieu],
-                  (err, result) => {
-                    if (err) {
-                      console.log(err);
+          if(id_nguoigioithieu){
+              db.query(
+              "SELECT * FROM khachhang WHERE id_khachhang = ?",
+              [id_nguoigioithieu],
+              (err, result) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  const newSavePoint = result[0].diemtichluy + 1
+                  const prPoint = result[0].nguoigioithieu + 1
+                  db.query(
+                    "UPDATE khachhang SET diemtichluy = ? where id_khachhang = ? ",
+                    [newSavePoint, id_nguoigioithieu],
+                    (err, result) => {
+                      if (err) {
+                        console.log(err);
+                      }
                     }
-                  }
-                );
-                db.query(
-                  "UPDATE khachhang SET nguoigioithieu = ? where id_khachhang = ? ",
-                  [prPoint, id_nguoigioithieu],
-                  (err, result) => {
-                    if (err) {
-                      console.log(err);
+                  );
+                  db.query(
+                    "UPDATE khachhang SET nguoigioithieu = ? where id_khachhang = ? ",
+                    [prPoint, id_nguoigioithieu],
+                    (err, result) => {
+                      if (err) {
+                        console.log(err);
+                      }
                     }
-                  }
-                );
+                  );
+                }
               }
-            }
-          );
+            );
+          }
+          
           db.query(
             "INSERT INTO khachhang (hoten, diachi, sodienthoai, benhly, ghichu, diemtichluy, nguoigioithieu) VALUES (?,?,?,?,?,?,?)",
             [hoten, diachi, sodienthoai, benhly, ghichu, 0, 0],
