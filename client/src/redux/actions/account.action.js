@@ -4,7 +4,7 @@ const md5 = require('md5');
 export const getAccountAction = () => async (dispatch) => {
     try {
         dispatch({ type: "GET_ACCOUNT_REQUEST" });
-        const { data } = await axios.get("http://14.236.55.118:3001/account");
+        const { data } = await axios.get("http://localhost:3001/account");
         dispatch({
             type: "GET_ACCOUNT_SUCCESS",
             payload: data,
@@ -23,7 +23,7 @@ export const getAccountAction = () => async (dispatch) => {
 export const addAccountAction = (params) => async (dispatch) => {
     try {
         dispatch({ type: "ADD_ACCOUNT_REQUEST" });
-        const data = await axios.post("http://14.236.55.118:3001/addaccount", {
+        const data = await axios.post("http://localhost:3001/addaccount", {
             username: params.username,
             email: params.email,
             role: params.role,
@@ -47,7 +47,7 @@ export const addAccountAction = (params) => async (dispatch) => {
 export const resetPasswordAction = (id) => async (dispatch) => {
     try {
         dispatch({ type: "RESET_PASSWORD_REQUEST" });
-        await axios.put(`http://14.236.55.118:3001/resetpassword`, {
+        await axios.put(`http://localhost:3001/resetpassword`, {
             id_user: id,
         });
         dispatch({
@@ -67,7 +67,7 @@ export const resetPasswordAction = (id) => async (dispatch) => {
 export const editAccountAction = (params) => async (dispatch) => {
     try {
         dispatch({ type: "EDIT_ACCOUNT_REQUEST" });
-        await axios.put("http://14.236.55.118:3001/editaccount", {
+        await axios.put("http://localhost:3001/editaccount", {
             id_qtv: params.id_qtv,
             trangthai: params.trangthai,
             role: params.role,
@@ -98,10 +98,9 @@ export const getRoleAction = () => async (dispatch) => {
     const account = JSON.parse(localStorage.getItem('user')) || {};
     try {
         dispatch({ type: "GET_ROLE_REQUEST" });
-        const data = await axios.post("http://14.236.55.118:3001/getrole", {
+        const data = await axios.post("http://localhost:3001/getrole", {
             token : account.token,
         });
-        console.log(data)
         dispatch({
             type: "GET_ROLE_SUCCESS",
             payload: data,
@@ -120,7 +119,7 @@ export const getRoleAction = () => async (dispatch) => {
 export const updatePasswordAction = (oldPass, newPass, email) => async (dispatch) => {
     try {
       dispatch({ type: "UPDATE_PASSWORD_REQUEST" });
-      const data = await axios.put("http://14.236.55.118:3001/updatepassword", {
+      const data = await axios.put("http://localhost:3001/updatepassword", {
         oldPass: md5(oldPass),
         newPass: md5(newPass),
         email,

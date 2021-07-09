@@ -113,7 +113,6 @@ export default function ReadAccount() {
         dispatch(editAccountAction(newValue))
         setVisible(false)
     }
-    console.log(role)
     return (
         <>
             <Row style={{ marginTop: '30px' }}>

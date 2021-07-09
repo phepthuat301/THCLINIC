@@ -3,7 +3,7 @@ import axios from 'axios'
 export const addServicesAction = (params) => async (dispatch) => {
     try {
         dispatch({ type: "ADD_SERVICES_REQUEST" });
-        const data = await axios.post("http://14.236.55.118:3001/addservices", {
+        const data = await axios.post("http://localhost:3001/addservices", {
             tendv: params.tendv,
             giadv: params.giadv,
             madv: params.madv,
@@ -31,7 +31,7 @@ export const getServicesAction = () => async (dispatch) => {
     try {
         dispatch({ type: "GET_SERVICES_REQUEST" });
 
-        const { data } = await axios.get("http://14.236.55.118:3001/services");
+        const { data } = await axios.get("http://localhost:3001/services");
 
         dispatch({
             type: "GET_SERVICES_SUCCESS",
@@ -52,7 +52,7 @@ export const getActiveServicesAction = () => async (dispatch) => {
     try {
         dispatch({ type: "GET_ACTIVE_SERVICES_REQUEST" });
 
-        const { data } = await axios.get("http://14.236.55.118:3001/activeservices");
+        const { data } = await axios.get("http://localhost:3001/activeservices");
 
         dispatch({
             type: "GET_ACTIVE_SERVICES_SUCCESS",
@@ -73,7 +73,7 @@ export const getServicesHistoryAction = () => async (dispatch) => {
     try {
         dispatch({ type: "GET_SERVICES_HISTORY_REQUEST" });
 
-        const { data } = await axios.get("http://14.236.55.118:3001/serviceshistory");
+        const { data } = await axios.get("http://localhost:3001/serviceshistory");
 
         dispatch({
             type: "GET_SERVICES_HISTORY_SUCCESS",
@@ -93,7 +93,7 @@ export const getServicesHistoryAction = () => async (dispatch) => {
 export const updateServicesAction = (params) => async (dispatch) => {
     try {
         dispatch({ type: "UPDATE_SERVICES_REQUEST" });
-        await axios.put("http://14.236.55.118:3001/updateservices", {
+        await axios.put("http://localhost:3001/updateservices", {
             id_dichvu: params.id_dichvu,
             trangthai: params.trangthai,
         });
@@ -115,7 +115,7 @@ export const updateServicesAction = (params) => async (dispatch) => {
 export const deleteServiceAction = (id) => async (dispatch) => {
     try {
         dispatch({ type: "DELETE_SERVICE_REQUEST" });
-        const { data } = await axios.delete(`http://14.236.55.118:3001/deleteservice/${id}`);
+        const { data } = await axios.delete(`http://localhost:3001/deleteservice/${id}`);
         const newData = {
             data: data,
             id: id,
@@ -139,7 +139,7 @@ export const getOrderAction = () => async (dispatch) => {
     try {
         dispatch({ type: "GET_ORDER_REQUEST" });
 
-        const { data } = await axios.get("http://14.236.55.118:3001/order");
+        const { data } = await axios.get("http://localhost:3001/order");
 
         dispatch({
             type: "GET_ORDER_SUCCESS",

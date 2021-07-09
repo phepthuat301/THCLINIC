@@ -4,7 +4,7 @@ const crypto = require('crypto')
 export const addUserAction = (params) => async (dispatch) => {
   try {
     dispatch({ type: "ADD_USER_REQUEST" });
-    const data = await axios.post("http://14.236.55.118:3001/adduser", {
+    const data = await axios.post("http://localhost:3001/adduser", {
       hoten: params.hoten,
       diachi: params.diachi,
       sodienthoai: params.sodienthoai,
@@ -30,7 +30,7 @@ export const addUserAction = (params) => async (dispatch) => {
 export const getUserAction = () => async (dispatch) => {
   try {
     dispatch({ type: "GET_USER_REQUEST" });
-    const { data } = await axios.get("http://14.236.55.118:3001/user");
+    const { data } = await axios.get("http://localhost:3001/user");
     dispatch({
       type: "GET_USER_SUCCESS",
       payload: data,
@@ -57,7 +57,7 @@ export const updateDieutriAction = (id, num, id_kh, storageNum) => async (dispat
   const data = { id, num, id_kh, storageNum }
   try {
     dispatch({ type: "UPDATE_DIEUTRI_REQUEST" });
-    await axios.put("http://14.236.55.118:3001/updatedieutri", {
+    await axios.put("http://localhost:3001/updatedieutri", {
       id,
       num,
       id_kh,
@@ -81,7 +81,7 @@ export const updateDieutriAction = (id, num, id_kh, storageNum) => async (dispat
 export const updateUserAction = (params) => async (dispatch) => {
   try {
     dispatch({ type: "UPDATE_USER_REQUEST" });
-    await axios.put("http://14.236.55.118:3001/updateuser", {
+    await axios.put("http://localhost:3001/updateuser", {
       id_khachhang: params.id_khachhang,
       hoten: params.hoten,
       diachi: params.diachi,
@@ -106,7 +106,7 @@ export const updateUserAction = (params) => async (dispatch) => {
 export const createInvoiceAction = (IDKH,IDDV,diemtichluy) => async (dispatch) => {
   try {
       dispatch({ type: "CREATE_INVOICE_REQUEST" });
-      await axios.post("http://14.236.55.118:3001/createinvoice", {
+      await axios.post("http://localhost:3001/createinvoice", {
           IDKH,
           IDDV,
           diemtichluy,
@@ -130,7 +130,7 @@ export const createInvoiceAction = (IDKH,IDDV,diemtichluy) => async (dispatch) =
 export const deleteUserAction = (id) => async (dispatch) => {
   try {
       dispatch({ type: "DELETE_USER_REQUEST" });
-      const { data } = await axios.delete(`http://14.236.55.118:3001/deleteuser/${id}`);
+      const { data } = await axios.delete(`http://localhost:3001/deleteuser/${id}`);
       const newData = {
           data: data,
           id: id,
@@ -153,7 +153,7 @@ export const deleteUserAction = (id) => async (dispatch) => {
 export const loginAction = (params) => async (dispatch) => {
   try {
     dispatch({ type: "LOGIN_REQUEST" });
-    const data = await axios.post(`http://14.236.55.118:3001/login`, {
+    const data = await axios.post(`http://localhost:3001/login`, {
       password: md5(params.password),
       username: params.username,
       token: crypto.randomBytes(20).toString('hex')
@@ -176,7 +176,7 @@ export const loginAction = (params) => async (dispatch) => {
 export const adminCheckAction = (id) => async (dispatch) => {
   try {
     dispatch({ type: "ADMIN_CHECK_REQUEST" });
-    const { data } = await axios.get(`http://14.236.55.118:3001/admincheck/${id}`);
+    const { data } = await axios.get(`http://localhost:3001/admincheck/${id}`);
     dispatch({
       type: "ADMIN_CHECK_SUCCESS",
       payload: data,
