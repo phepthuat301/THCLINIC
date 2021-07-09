@@ -281,7 +281,15 @@ export default function ReadUser() {
                 <div style={{ marginBottom: '30px' }} class="ant-drawer-header">
                     <div class="ant-drawer-title">Chọn Dịch Vụ</div>
                 </div>
-                <Select style={{ width: '500px', marginBottom: '20px' }} placeholder="Chọn dịch vụ" onChange={(value) => setIDDV(value)}>
+                <Select
+                    showSearch
+                    filterOption={(input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    style={{ width: '500px', marginBottom: '20px' }}
+                    placeholder="Chọn dịch vụ"
+                    onChange={(value) => setIDDV(value)}
+                >
                     {activeServicesList.map((item, index) => {
                         return <Select.Option key={index} value={item.id_dichvu}>{item.tendichvu}</Select.Option>
                     })}

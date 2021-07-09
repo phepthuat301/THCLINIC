@@ -109,7 +109,7 @@ function filterUser(x) {
 }
 //GET USER
 app.get("/user", (req, res) => {
-  db.query("select a.*,b.id_donhang,b.id_dichvu,b.solandadieutri,c.* from khachhang a left join donhang b on a.id_khachhang = b.id_khachhang  left join dichvu c on b.id_dichvu = c.id_dichvu ", (err, result) => {
+  db.query("select a.*,b.id_donhang,b.id_dichvu,b.solandadieutri,c.* from khachhang a left join donhang b on a.id_khachhang = b.id_khachhang  left join dichvu c on b.id_dichvu = c.id_dichvu order by id_khachhang desc", (err, result) => {
     if (err) {
       console.log(err);
     } else {

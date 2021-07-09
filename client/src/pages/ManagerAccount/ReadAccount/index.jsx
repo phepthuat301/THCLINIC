@@ -28,7 +28,7 @@ export default function ReadAccount() {
 
     useEffect(() => {
         newsForm.resetFields();
-    }, [])
+    }, [newsForm])
 
     function displayRole(role) {
         if (role === "admin") {

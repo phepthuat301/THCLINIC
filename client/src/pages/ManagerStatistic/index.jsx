@@ -24,7 +24,7 @@ export default function StatisticManager() {
         dispatch(getUserInMonthAction(d.getFullYear()));
         return () => {
         }
-    }, []);
+    }, [dispatch]);
     let newRevenueData = [];
     let newOrderTotalData = [];
     let newDayRevenueData = [];

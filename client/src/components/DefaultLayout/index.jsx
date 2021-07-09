@@ -37,7 +37,7 @@ function DefaultLayout(props) {
     useEffect(() => {
         dispatch(get30daysAction())
         dispatch(adminCheckAction(user.token))
-    }, [user.token]);
+    }, [user.token,dispatch]);
 
     if (check === false) {
         return <Redirect to="/login" />

@@ -190,8 +190,8 @@ export default function ReadServices() {
                             style={{ width: 500 }}
                             min={1}
                             max={10000000}
-                            formatter={value => `VNĐ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\VNĐ\s?|(,*)/g, '')}
+                            formatter={value =>`VNĐ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/VNĐ\s?|(,*)/g, '')}
                             disabled
                         />
                     </Form.Item>

@@ -16,7 +16,7 @@ export default function ExamHistory() {
         return () => {
             dispatch(removeServicesAction())
         }
-    }, []);
+    }, [dispatch]);
     serviceHistory.forEach(item => {
         item.getTime = new Date(item.ngaytaikham).getTime();
         item.ngaytaikham = item.ngaytaikham.replace("T", " ").substr(0, 19)

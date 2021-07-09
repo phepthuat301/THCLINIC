@@ -16,7 +16,7 @@ export default function ReadOrder() {
         return () => {
             dispatch(removeServicesAction())
         }
-    }, []);
+    }, [dispatch]);
     orderList.forEach(item => {
         item.getTime = new Date(item.ngaytao).getTime();
         item.ngaytao = item.ngaytao.replace("T", " ").substr(0, 19)

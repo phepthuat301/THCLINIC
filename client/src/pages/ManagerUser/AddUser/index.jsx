@@ -24,7 +24,7 @@ export default function AddUser() {
         return () => {
             dispatch(removeUserAction())
         }
-    }, []);
+    }, [dispatch]);
     return (
         <>
             <div style={{ textAlign: 'center', width: '100%', backgroundColor: '#f1f1f1' }}>
@@ -116,12 +116,6 @@ export default function AddUser() {
                 <Form.Item
                     className="form-in"
                     name="ghichu"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập ghi chú!',
-                        },
-                    ]}
                 >
                     <Input placeholder="Nhập ghi chú của bệnh nhân" />
                 </Form.Item>

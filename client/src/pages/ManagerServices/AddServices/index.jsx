@@ -83,7 +83,7 @@ export default function AddServices() {
                             min={0}
                             max={10000000}
                             formatter={value => `VNĐ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\VNĐ\s?|(,*)/g, '')}
+                            parser={value => value.replace(/VNĐ\s?|(,*)/g, '')}
                         />
                     </Form.Item>
 
@@ -94,9 +94,9 @@ export default function AddServices() {
                         <InputNumber
                             style={{ width: 500 }}
                             min={0}
-                            max={100}
+                            max={1000}
                             formatter={value => `Điểm ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\Điểm\s?|(,*)/g, '')}
+                            parser={value => value.replace(/Điểm\s?|(,*)/g, '')}
                         />
                     </Form.Item>
 
