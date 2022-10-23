@@ -35,15 +35,16 @@ function DefaultLayout(props) {
     const { check, email, trangthai } = getUserInfo;
     var user = JSON.parse(localStorage.getItem('user')) || {};
     useEffect(() => {
-        dispatch(get30daysAction())
-        dispatch(adminCheckAction(user.token))
-    }, [user.token,dispatch]);
+        // dispatch(get30daysAction())
+        if ((!check || !trangthai || !email) && user.token) dispatch(adminCheckAction(user.token))
+    }, []);
 
-    if (check === false) {
+    if (!check) {
+        swal("Vui lòng đăng nhập", "", "error")
         return <Redirect to="/login" />
     }
-    if( trangthai !== 1){
-        swal("Tài Khoản Của Bạn Đã Bị Khóa","Vui lòng liên hệ với BOSS để biết thêm chi tiết","error")
+    if (trangthai && trangthai !== 1) {
+        swal("Tài Khoản Của Bạn Đã Bị Khóa", "Vui lòng liên hệ với BOSS để biết thêm chi tiết", "error")
         return <Redirect to="/login" />
     }
     function pushNotify() {
@@ -91,7 +92,7 @@ function DefaultLayout(props) {
                                     <Button style={{ marginLeft: '50px' }} onClick={() => { dispatch(logoutAction()) }} type="ghost">Đăng Xuất</Button>
                                     <Button style={{ marginLeft: '50px' }} onClick={() => setIsModalVisible(true)} type="ghost">Đổi Mật Khẩu</Button>
                                     <Modal title="Đổi Mật Khẩu" visible={isModalVisible} footer={null} onCancel={handleCancel}>
-                                        <ResetPWD email={email} setIsModalVisible={setIsModalVisible}/>
+                                        <ResetPWD email={email} setIsModalVisible={setIsModalVisible} />
                                     </Modal>
                                 </Menu>
 

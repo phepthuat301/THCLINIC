@@ -180,7 +180,7 @@ export default function userReducer(state = initialState, action) {
                 };
             } else {
                 const newInfo = {
-                    token: action.payload.data,
+                    token: action.payload.data.token,
                 }
                 localStorage.setItem('user', JSON.stringify(newInfo));
                 swal("Đăng nhập thành công!", {
@@ -203,6 +203,9 @@ export default function userReducer(state = initialState, action) {
                     });
                 return {
                     ...state,
+                    check: true,
+                    email: action.payload.data.email,
+                    trangthai: action.payload.data.trangthai,
                     loading: false,
                 };
             }

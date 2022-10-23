@@ -2,12 +2,22 @@
 const app = express();
 const cors = require("cors");
 const db = require("./config");
-const fileUpload = require('express-fileupload');
 //
 app.use(cors());
 app.use(express.json());
-app.use(fileUpload());
 
+const dbmigrate = DBMigrate.getInstance(true, {
+  config: './database.json',
+  cmdOptions: {
+    'migrations-dir': './migration'
+  },
+  env: "env",
+});
+dbmigrate.up()
+  .then(function () {
+    console.log('successfully migrated');
+    return;
+  });
 
 //ADD USER
 app.post("/adduser", (req, res) => {
