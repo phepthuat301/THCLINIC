@@ -1,31 +1,6 @@
--- phpMyAdmin SQL Dump
--- version 5.1.0
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Jun 27, 2021 at 10:10 AM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.6
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `thclinic`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `dichvu`
---
 
 CREATE TABLE `dichvu` (
   `id_dichvu` int(11) NOT NULL,
@@ -37,9 +12,6 @@ CREATE TABLE `dichvu` (
   `giatichluy` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `dichvu`
---
 
 INSERT INTO `dichvu` (`id_dichvu`, `tendichvu`, `giatien`, `solandieutri`, `trangthai`, `madichvu`, `giatichluy`) VALUES
 (2, 'Xoa Bóp Trị Liệu', 55555, 6, 1, 'XB01', NULL),
@@ -47,11 +19,6 @@ INSERT INTO `dichvu` (`id_dichvu`, `tendichvu`, `giatien`, `solandieutri`, `tran
 (4, 'abc', 55555, 7, 1, 'ABC01', NULL),
 (6, 'test điểm thương', 1, 5, 1, 'DT01', 5);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `donhang`
---
 
 CREATE TABLE `donhang` (
   `id_donhang` int(11) NOT NULL,
@@ -61,9 +28,7 @@ CREATE TABLE `donhang` (
   `solandadieutri` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `donhang`
---
+
 
 INSERT INTO `donhang` (`id_donhang`, `id_khachhang`, `ngaytao`, `id_dichvu`, `solandadieutri`) VALUES
 (4, 3, '2021-06-21 15:49:02', 2, 6),
@@ -101,11 +66,7 @@ INSERT INTO `donhang` (`id_donhang`, `id_khachhang`, `ngaytao`, `id_dichvu`, `so
 (36, 12, '2021-06-24 11:59:15', 6, 0),
 (37, 12, '2021-06-24 12:14:49', 6, 0);
 
--- --------------------------------------------------------
 
---
--- Table structure for table `khachhang`
---
 
 CREATE TABLE `khachhang` (
   `id_khachhang` int(11) NOT NULL,
@@ -118,10 +79,6 @@ CREATE TABLE `khachhang` (
   `diemtichluy` int(2) DEFAULT NULL,
   `nguoigioithieu` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `khachhang`
---
 
 INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `diachi`, `sodienthoai`, `benhly`, `ghichu`, `ngaykham`, `diemtichluy`, `nguoigioithieu`) VALUES
 (2, 'Trần Hà Nam', '74 NTHHH', '793966348', 'abc', 'abc', '2021-06-10 09:23:40', 5, 1),
@@ -137,11 +94,7 @@ INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `diachi`, `sodienthoai`, `benh
 (12, 'Nguyễn Thành Công', 'Palm garden', '932537795', 'Cột sống cổ', 'Chưa thanh toán', '2021-06-24 11:23:26', 17, 0),
 (13, 'gia vĩnh khang', 'ád', '123456780', 'aaaaaaa', 'aaaa', '2021-06-24 12:37:29', 0, 0);
 
--- --------------------------------------------------------
 
---
--- Table structure for table `lichsukham`
---
 
 CREATE TABLE `lichsukham` (
   `id_lsk` int(11) NOT NULL,
@@ -150,9 +103,6 @@ CREATE TABLE `lichsukham` (
   `tientrinhdieutri` int(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `lichsukham`
---
 
 INSERT INTO `lichsukham` (`id_lsk`, `id_donhang`, `ngaytaikham`, `tientrinhdieutri`) VALUES
 (3, 4, '2021-06-21 15:49:02', NULL),
@@ -246,11 +196,7 @@ INSERT INTO `lichsukham` (`id_lsk`, `id_donhang`, `ngaytaikham`, `tientrinhdieut
 (91, 35, '2021-06-24 11:38:16', 7),
 (92, 28, '2021-06-24 12:49:44', 2);
 
--- --------------------------------------------------------
 
---
--- Table structure for table `quantrivien`
---
 
 CREATE TABLE `quantrivien` (
   `id_qtv` int(11) NOT NULL,
@@ -262,103 +208,56 @@ CREATE TABLE `quantrivien` (
   `trangthai` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `quantrivien`
---
+
 
 INSERT INTO `quantrivien` (`id_qtv`, `username`, `password`, `role`, `token`, `email`, `trangthai`) VALUES
 (1, 'drsol', '25f9e794323b453885f5181f1b624d0b', 'admin', 'f79ad1785525697d93e14e3cf187fb3454b4333f', 'drsol@gmail.com', 1),
 (2, 'mrlep', '687bb51c59d93a86004e5d64b4d944c9', 'user', 'd530f3d8478f97c5f876da0e5a3e41c35cde4fcf', 'phepthuat301@gmail.com', 1);
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `dichvu`
---
 ALTER TABLE `dichvu`
   ADD PRIMARY KEY (`id_dichvu`);
 
---
--- Indexes for table `donhang`
---
 ALTER TABLE `donhang`
   ADD PRIMARY KEY (`id_donhang`),
   ADD KEY `donhang-khachhang` (`id_khachhang`),
   ADD KEY `donhang-dichvu` (`id_dichvu`);
 
---
--- Indexes for table `khachhang`
---
 ALTER TABLE `khachhang`
   ADD PRIMARY KEY (`id_khachhang`);
 
---
--- Indexes for table `lichsukham`
---
 ALTER TABLE `lichsukham`
   ADD PRIMARY KEY (`id_lsk`),
   ADD KEY `lsk-donhang` (`id_donhang`);
 
---
--- Indexes for table `quantrivien`
---
+
 ALTER TABLE `quantrivien`
   ADD PRIMARY KEY (`id_qtv`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `dichvu`
---
 ALTER TABLE `dichvu`
   MODIFY `id_dichvu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
---
--- AUTO_INCREMENT for table `donhang`
---
+
 ALTER TABLE `donhang`
   MODIFY `id_donhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
---
--- AUTO_INCREMENT for table `khachhang`
---
 ALTER TABLE `khachhang`
   MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
---
--- AUTO_INCREMENT for table `lichsukham`
---
+
 ALTER TABLE `lichsukham`
   MODIFY `id_lsk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
---
--- AUTO_INCREMENT for table `quantrivien`
---
 ALTER TABLE `quantrivien`
   MODIFY `id_qtv` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `donhang`
---
 ALTER TABLE `donhang`
   ADD CONSTRAINT `donhang-dichvu` FOREIGN KEY (`id_dichvu`) REFERENCES `dichvu` (`id_dichvu`),
   ADD CONSTRAINT `donhang-khachhang` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`);
 
---
--- Constraints for table `lichsukham`
---
+
 ALTER TABLE `lichsukham`
   ADD CONSTRAINT `lsk-donhang` FOREIGN KEY (`id_donhang`) REFERENCES `donhang` (`id_donhang`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

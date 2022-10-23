@@ -17,7 +17,7 @@ exports.setup = function (options, seedLink) {
 exports.up = function (db) {
   return db.runSql(`
   SET time_zone = "+07:00";
-  
+  USE thclinic;
   CREATE TABLE dichvu (
     id_dichvu int(11) NOT NULL,
     tendichvu varchar(200) NOT NULL,
@@ -236,15 +236,15 @@ exports.up = function (db) {
   
   ALTER TABLE donhang
     ADD PRIMARY KEY (id_donhang),
-    ADD KEY donhang-khachhang (id_khachhang),
-    ADD KEY donhang-dichvu (id_dichvu);
+    ADD KEY donhangkhachhang (id_khachhang),
+    ADD KEY donhangdichvu (id_dichvu);
   
   ALTER TABLE khachhang
     ADD PRIMARY KEY (id_khachhang);
   
   ALTER TABLE lichsukham
     ADD PRIMARY KEY (id_lsk),
-    ADD KEY lsk-donhang (id_donhang);
+    ADD KEY lskdonhang (id_donhang);
   
   
   ALTER TABLE quantrivien
@@ -270,12 +270,12 @@ exports.up = function (db) {
   
   
   ALTER TABLE donhang
-    ADD CONSTRAINT donhang-dichvu FOREIGN KEY (id_dichvu) REFERENCES dichvu (id_dichvu),
-    ADD CONSTRAINT donhang-khachhang FOREIGN KEY (id_khachhang) REFERENCES khachhang (id_khachhang);
+    ADD CONSTRAINT donhangdichvu FOREIGN KEY (id_dichvu) REFERENCES dichvu (id_dichvu),
+    ADD CONSTRAINT donhangkhachhang FOREIGN KEY (id_khachhang) REFERENCES khachhang (id_khachhang);
   
   
   ALTER TABLE lichsukham
-    ADD CONSTRAINT lsk-donhang FOREIGN KEY (id_donhang) REFERENCES donhang (id_donhang);
+    ADD CONSTRAINT lskdonhang FOREIGN KEY (id_donhang) REFERENCES donhang (id_donhang);
   COMMIT;`
   )
 };

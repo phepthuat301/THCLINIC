@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  # vltl-fe:
+  #   image: namtran2199/vltl-fe
+  #   build:
+  #     context: ./client
+  #   ports:
+  #     - 3003:3003
+  #   environment:
+  #     - REACT_APP_API_URL=https://api-vltl.hieugiaynhuy.com
+  #     - REACT_APP_PORT=3003
+  #   restart: always
+
+  # vltl-api:
+  #   image: namtran2199/nhuy:api
+  #   build:
+  #     context: ./server
+  #   environment:
+  #     - API_PORT=3001
+  #     - SHOP_URL=https://vltl.hieugiaynhuy.com
+  #     - MYSQL_DB_HOST=main_db
+  #     - MYSQL_DB_PORT=3306
+  #     - MYSQL_DB_USER=nhuyshop_user
+  #     - MYSQL_DB_PASS=nhuyshop_pass
+  #     - MYSQL_DB_NAME=thclinic
+  #     - MYSQL_DB_TIMEZONE=gmt
+  #   ports:
+  #     - 3001:3001
+  #   restart: always
+
+  main_db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: nhuyshop
+      MYSQL_USER: nhuyshop_user
+      MYSQL_PASSWORD: nhuyshop_pass
+      MYSQL_ROOT_PASSWORD: 123456
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:             
+      - ./init:/docker-entrypoint-initdb.d
+

@@ -2,6 +2,8 @@
 const app = express();
 const cors = require("cors");
 const db = require("./config");
+const DBMigrate = require('db-migrate');
+require('dotenv').config()
 //
 app.use(cors());
 app.use(express.json());
@@ -37,8 +39,8 @@ app.post("/adduser", (req, res) => {
         if (result.length > 0) {
           res.send('found')
         } else {
-          if(id_nguoigioithieu){
-              db.query(
+          if (id_nguoigioithieu) {
+            db.query(
               "SELECT * FROM khachhang WHERE id_khachhang = ?",
               [id_nguoigioithieu],
               (err, result) => {
@@ -69,7 +71,7 @@ app.post("/adduser", (req, res) => {
               }
             );
           }
-          
+
           db.query(
             "INSERT INTO khachhang (hoten, diachi, sodienthoai, benhly, ghichu, diemtichluy, nguoigioithieu) VALUES (?,?,?,?,?,?,?)",
             [hoten, diachi, sodienthoai, benhly, ghichu, 0, 0],
@@ -451,7 +453,12 @@ app.post("/login", (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                res.send(token);
+                res.send({
+                  email: result[0].email,
+                  trangthai: result[0].trangthai,
+                  role: result[0].role,
+                  token: result[0].token
+                });
               }
             }
           );
@@ -572,14 +579,14 @@ app.put("/editaccount", (req, res) => {
 app.post("/getrole", (req, res) => {
   const token = req.body.token;
   db.query(
-    "Select token,role from quantrivien where token = ?",token,
+    "Select token,role from quantrivien where token = ?", token,
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        if(result.length > 0){
+        if (result.length > 0) {
           res.send(result)
-        }else{
+        } else {
           res.send("token not exist")
         }
       }
@@ -596,7 +603,7 @@ app.put("/updatepassword", (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        if(result[0].password !== oldPass) {
+        if (result[0].password !== oldPass) {
           res.send('false')
         } else {
           db.query(
