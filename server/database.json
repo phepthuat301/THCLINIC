@@ -1,0 +1,21 @@
+{
+  "env": {
+    "host": {
+      "ENV": "MYSQL_DB_HOST"
+    },
+    "port": {
+      "ENV": "MYSQL_DB_PORT"
+    },
+    "user": {
+      "ENV": "MYSQL_DB_USER"
+    },
+    "password": {
+      "ENV": "MYSQL_DB_PASS"
+    },
+    "database": {
+      "ENV": "MYSQL_DB_NAME"
+    },
+    "driver": "mysql",
+    "multipleStatements": true
+  }
+}

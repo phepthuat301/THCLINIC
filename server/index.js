@@ -1,12 +1,8 @@
-﻿const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-const express = require("express");
+﻿const express = require("express");
 const app = express();
 const cors = require("cors");
 const db = require("./config");
 const fileUpload = require('express-fileupload');
-const https = require('https');
-const fs = require('fs');
 //
 app.use(cors());
 app.use(express.json());
