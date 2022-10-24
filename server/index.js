@@ -623,7 +623,10 @@ app.put("/updatepassword", (req, res) => {
   );
 });
 
+setInterval(function () {
+  db.query('SELECT 1');
+}, 5000);
 
-app.listen(3001, () => {
-  console.log("Yey, your server is running on port 3001");
+app.listen(process.env.API_PORT ?? 3002, () => {
+  console.log(`Yey, your server is running on port ${process.env.API_PORT}`);
 });
