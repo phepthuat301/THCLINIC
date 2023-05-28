@@ -38,10 +38,10 @@ function DefaultLayout(props) {
     //     if ((!check || !trangthai || !email) && user.token) dispatch(adminCheckAction(user.token))
     // }, []);
 
-    if (!isLogged || !email) {
-        swal("Vui lòng đăng nhập", "", "error")
-        return <Redirect to="/login" />
-    }
+    // if (!isLogged || !email) {
+    //     swal("Vui lòng đăng nhập", "", "error")
+    //     return <Redirect to="/login" />
+    // }
     function pushNotify() {
         return (
             <>
