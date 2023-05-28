@@ -31,20 +31,15 @@ function DefaultLayout(props) {
 
     document.title = "Quản Lý | Thiện Hiếu"
 
-    const getUserInfo = useSelector((state) => state.userReducer);
-    const { check, email, trangthai } = getUserInfo;
-    var user = JSON.parse(localStorage.getItem('user')) || {};
-    useEffect(() => {
-        // dispatch(get30daysAction())
-        if ((!check || !trangthai || !email) && user.token) dispatch(adminCheckAction(user.token))
-    }, []);
+    const getAdminInfo = useSelector((state) => state.adminReducer);
+    const { email, isLogged } = getAdminInfo;
+    // useEffect(() => {
+    // dispatch(get30daysAction())
+    //     if ((!check || !trangthai || !email) && user.token) dispatch(adminCheckAction(user.token))
+    // }, []);
 
-    if (!check) {
+    if (!isLogged || !email) {
         swal("Vui lòng đăng nhập", "", "error")
-        return <Redirect to="/login" />
-    }
-    if (trangthai && trangthai !== 1) {
-        swal("Tài Khoản Của Bạn Đã Bị Khóa", "Vui lòng liên hệ với BOSS để biết thêm chi tiết", "error")
         return <Redirect to="/login" />
     }
     function pushNotify() {

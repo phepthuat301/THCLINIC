@@ -4,42 +4,75 @@
   display: flex;
 }
 
-.ant-menu-vertical > .ant-menu-item, .ant-menu-vertical-left > .ant-menu-item, .ant-menu-vertical-right > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+.ant-menu-vertical>.ant-menu-item,
+.ant-menu-vertical-left>.ant-menu-item,
+.ant-menu-vertical-right>.ant-menu-item,
+.ant-menu-inline>.ant-menu-item,
+.ant-menu-vertical>.ant-menu-submenu>.ant-menu-submenu-title,
+.ant-menu-vertical-left>.ant-menu-submenu>.ant-menu-submenu-title,
+.ant-menu-vertical-right>.ant-menu-submenu>.ant-menu-submenu-title,
+.ant-menu-inline>.ant-menu-submenu>.ant-menu-submenu-title {
   display: flex;
   align-items: center;
   justify-content: start;
   /* padding-left: 22px; */
 }
 
-.ant-menu-submenu-title > svg {
+.ant-menu-submenu-title>svg {
   font-size: 24px;
   min-width: 1em;
   min-height: 1em;
 }
 
-.ant-menu-submenu-title > span {
+.ant-menu-submenu-title>span {
   margin-left: 23.8px;
 }
 
-.ant-layout-sider-children > ul > li {
+.ant-layout-sider-children>ul>li {
   padding: 0;
 }
 
-.ant-layout-sider-children > ul > li > span > a > svg {
+.ant-layout-sider-children>ul>li>span>a>svg {
   font-size: 24px;
   margin-right: 23.4px;
 }
 
-.ant-layout-sider-children > ul > li > span > a {
+.ant-layout-sider-children>ul>li>span>a {
   display: flex;
   align-items: center;
   font-size: 14px;
 }
 
-.ant-layout > .ant-layout-sider > .ant-layout-content {
+.ant-layout>.ant-layout-sider>.ant-layout-content {
   padding: 0 !important;
 }
 
-.ant-layout-content > .ant-row {
+.ant-layout-content>.ant-row {
   margin-top: 0px !important;
+}
+
+.login-section {
+  background-image: url('./imgs/login-bg.png');
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100vh;
+}
+
+.login-form {
+  background: hsla(0, 0%, 100%, .9);
+  padding: 50px 40px 50px;
+  width: 150%;
+  z-index: 1;
+}
+
+.login-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(225deg, #15e9de4b,#b6305d);
+  z-index: 1;
+  mix-blend-mode: screen;
 }

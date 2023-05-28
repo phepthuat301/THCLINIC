@@ -3,11 +3,10 @@ import history from '../../utils/history'
 const initialState = {
     userList: [],
     userDetail: {},
-    check: null,
     email: null,
-    trangthai: null,
+    isLogged: false,
 };
-export default function userReducer(state = initialState, action) {
+export default function adminReducer(state = initialState, action) {
     switch (action.type) {
         case "ADD_USER_REQUEST":
             return {
