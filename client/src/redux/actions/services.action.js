@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { httpGet, httpPost } from '../../services/http.service';
+import { apiUrlV1 } from '../../utils/constant';
 
 export const addServicesAction = (params) => async (dispatch) => {
     try {
@@ -48,11 +50,11 @@ export const getServicesAction = () => async (dispatch) => {
     }
 };
 
-export const getActiveServicesAction = () => async (dispatch) => {
+export const getActiveServicesAction = (keyword, page, limit) => async (dispatch) => {
     try {
         dispatch({ type: "GET_ACTIVE_SERVICES_REQUEST" });
 
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/activeservices`);
+        const data = await httpPost(apiUrlV1.getListItem, { keyword: keyword ?? '', page, limit });
 
         dispatch({
             type: "GET_ACTIVE_SERVICES_SUCCESS",

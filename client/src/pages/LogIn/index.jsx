@@ -2,7 +2,7 @@ import { Form, Input, Button, Row, Col } from 'antd';
 //
 import React from 'react'
 import { useDispatch } from "react-redux";
-import { loginAction } from '../../redux/actions/user.action';
+import { loginAction } from '../../redux/actions';
 
 export default function LogIn() {
     const dispatch = useDispatch();
@@ -25,8 +25,8 @@ export default function LogIn() {
                         onFinish={onFinish}
                     >
                         <Form.Item
-                            label="Tên Đăng Nhập"
-                            name="username"
+                            label="Email"
+                            name="email"
                             rules={[
                                 {
                                     required: true,

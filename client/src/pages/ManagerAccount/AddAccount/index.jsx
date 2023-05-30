@@ -8,10 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { addAccountAction, getRoleAction, removeAccountAction } from '../../../redux/actions';
 ////
 import history from '../../../utils/history';
+import { RoleEnum } from '../../../utils/constant';
 
 export default function AddAccount() {
     const dispatch = useDispatch();
-    
+
     const getAdminContent = useSelector(state => state.accountReducer);
     const { role } = getAdminContent;
     function addAccount(value) {
@@ -24,11 +25,9 @@ export default function AddAccount() {
         }
     }, [dispatch]);
 
-    if (role.role) {
-        if (role.role !== "admin") {
-            swal("Xin Lỗi", "Bạn không đủ quyền truy cập vào chức năng này", "error")
-            history.push('/')
-        }
+    if (role.role && role.role !== RoleEnum.ADMIN) {
+        swal("Xin Lỗi", "Bạn không đủ quyền truy cập vào chức năng này", "error")
+        history.push('/')
     }
     return (
         <>

@@ -1,12 +1,67 @@
 import swal from "sweetalert";
+import { deleteToken, persistToken } from "../../services/local-storage.service";
+import history from "../../utils/history";
 
 const initialState = {
     accountList: [],
     accountDetail: {},
     role: "",
+    email: null,
+    isLogged: false,
 };
 export default function accountReducer(state = initialState, action) {
     switch (action.type) {
+        case "LOGIN_REQUEST":
+            return {
+                ...state,
+                loading: true,
+            };
+        case "LOGIN_SUCCESS":
+            if (action.payload.data) {
+                persistToken(action.payload.data.data);
+                swal(action.payload.data.message, {
+                    buttons: {
+                        dangnhap: {
+                            text: "Trang Chủ",
+                            value: true,
+                        },
+                    },
+                })
+                    .then((value) => {
+                        switch (value) {
+
+                            case "dangnhap":
+                                history.push("/")
+                                break;
+                            default:
+                                history.push("/")
+                        }
+                    });
+                return {
+                    ...state,
+                    isLogged: true,
+                    email: action.payload.email,
+                    loading: false,
+                };
+            }
+
+        case "LOGIN_FAIL":
+            swal(action.payload, "", "error")
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            };
+
+        case 'LOGOUT': {
+            deleteToken();
+            history.push("/login")
+            return {
+                ...state,
+                isLogged: false,
+                email: null
+            };
+        }
 
         case "GET_ACCOUNT_REQUEST":
             return {
@@ -117,9 +172,7 @@ export default function accountReducer(state = initialState, action) {
                 loading: true,
             };
         case "UPDATE_PASSWORD_SUCCESS":
-            if (action.payload.data === false) {
-                swal("Mật khẩu cũ không đúng", "vui lòng nhập lại", "warning")
-            } else {
+            if (action.payload.data) {
                 swal("Bạn đã thay đổi mật khẩu thành công", "", "success")
             }
             return {
@@ -127,6 +180,7 @@ export default function accountReducer(state = initialState, action) {
                 loading: false,
             };
         case "UPDATE_PASSWORD_FAIL":
+            swal(action.payload, "", "error")
             return {
                 ...state,
                 loading: false,

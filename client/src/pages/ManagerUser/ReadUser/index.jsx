@@ -100,14 +100,14 @@ export default function ReadUser() {
     }
     const columns = [
 
-        { title: 'Ngày Đăng Ký', dataIndex: 'ngaykham', key: 'ngaykham' },
-        { title: 'Điểm Tích Lũy', dataIndex: 'diemtichluy', key: 'diemtichluy' },
-        { title: 'Người Giới Thiệu', dataIndex: 'nguoigioithieu', key: 'nguoigioithieu' },
-        { title: 'Họ Tên', dataIndex: 'hoten', key: 'hoten' },
-        { title: 'Địa Chỉ', dataIndex: 'diachi', key: 'diachi' },
-        { title: 'Số Điện Thoại', dataIndex: 'sodienthoai', key: 'sodienthoai' },
-        { title: 'Bệnh Lý', dataIndex: 'benhly', key: 'benhly' },
-        { title: 'Ghi Chú', dataIndex: 'ghichu', key: 'ghichu' },
+        { title: 'Ngày Đăng Ký', dataIndex: 'createdAt', key: 'createdAt' },
+        { title: 'Điểm Tích Lũy', dataIndex: 'reward_point', key: 'reward_point' },
+        // { title: 'Người Giới Thiệu', dataIndex: 'nguoigioithieu', key: 'nguoigioithieu' },
+        { title: 'Họ Tên', dataIndex: 'name', key: 'name' },
+        { title: 'Địa Chỉ', dataIndex: 'address', key: 'address' },
+        { title: 'Số Điện Thoại', dataIndex: 'phone', key: 'phone' },
+        { title: 'Bệnh Lý', dataIndex: 'pathological', key: 'pathological' },
+        { title: 'Ghi Chú', dataIndex: 'note', key: 'note' },
         {
             title: 'Action',
             key: 'id_khachhang',
@@ -126,8 +126,9 @@ export default function ReadUser() {
     ///////// SEARCH
     const [searchKey, setSearchKey] = useState('')
     const filterUserList = userList.filter((item) => {
-        return item.hoten.trim().toLowerCase().indexOf(searchKey.trim().toLowerCase()) !== -1 || item.sodienthoai.trim().indexOf(searchKey.trim()) !== -1;
+        return item.name.trim().toLowerCase().indexOf(searchKey.trim().toLowerCase()) !== -1 || item.phone.trim().indexOf(searchKey.trim()) !== -1;
     });
+
     const newCollums = [
         { title: 'Tên Dịch Vụ', dataIndex: 'tendichvu', key: 'tendichvu' },
         { title: 'Mã Dịch Vụ', dataIndex: 'madichvu', key: 'madichvu' },
@@ -149,8 +150,8 @@ export default function ReadUser() {
     ];
 
     userList.forEach(item => {
-        item.getTime = new Date(item.ngaykham).getTime();
-        item.ngaykham = item.ngaykham.replace("T", " ").substr(0, 19)
+        item.getTime = new Date(item.createdAt).getTime();
+        item.createdAt = item.createdAt.replace("T", " ").substr(0, 19)
     })
     return (
         <>
@@ -168,10 +169,10 @@ export default function ReadUser() {
                 </div>
                 <Col span={22} offset={1}>
                     <Table dataSource={filterUserList} columns={columns} pagination={{ position: ['bottomCenter'] }}
-                        expandable={{
-                            expandedRowRender: record => <Table style={{ marginBottom: '50px' }} columns={newCollums} dataSource={record.historyList} pagination={false} />,
-                            rowExpandable: record => record.historyList[0]?.tendichvu,
-                        }}
+                        // expandable={{
+                        //     expandedRowRender: record => <Table style={{ marginBottom: '50px' }} columns={newCollums} dataSource={record.historyList} pagination={false} />,
+                        //     rowExpandable: record => record.historyList[0]?.tendichvu,
+                        // }}
                     />
                 </Col>
             </Row>

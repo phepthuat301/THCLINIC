@@ -1,30 +1,42 @@
-import React, { useEffect } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, Select, DatePicker } from 'antd';
 import { useDispatch, useSelector } from "react-redux";
 import { addUserAction, getUserAction, removeUserAction } from "../../../redux/actions";
+import { Genders } from '../../../utils/constant';
 export default function AddUser() {
     const dispatch = useDispatch();
     const getAdminContent = useSelector(state => state.userReducer);
     const { userList } = getAdminContent;
+    const [inputValue, setInputValue] = useState('');
+
     function addUser(value) {
-        let newPhone = value.sodienthoai.substring(0, 1)
+        let newPhone = value.phone.substring(0, 1)
         if (newPhone === "0") {
-            newPhone = value.sodienthoai.slice(1)
+            newPhone = value.phone.slice(1)
         } else {
-            newPhone = value.sodienthoai;
+            newPhone = value.phone;
         }
         const newValue = {
             ...value,
-            sodienthoai: newPhone,
+            phone: newPhone,
+            date_of_birth: value.date_of_birth.toDate()
         }
         dispatch(addUserAction(newValue))
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            dispatch(getUserAction(inputValue));
+        }
+    };
+    
     useEffect(() => {
         dispatch(getUserAction());
         return () => {
             dispatch(removeUserAction())
         }
     }, [dispatch]);
+
     return (
         <>
             <div style={{ textAlign: 'center', width: '100%', backgroundColor: '#f1f1f1' }}>
@@ -39,24 +51,46 @@ export default function AddUser() {
             >
                 <Form.Item
                     className="form-in"
-                    name="id_nguoigioithieu"
+                    name="referral_code"
                 >
                     <Select
                         showSearch
                         placeholder="Chọn người giới thiệu"
-                        filterOption={(input, option) => 
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
+                        onInputKeyDown={handleKeyDown}
+                        onSearch={(value) => setInputValue(value)}
                     >
-                        {userList.map((item,index)=>{
-                            return <Select.Option key={index} value={item.id_khachhang}>{item.hoten}</Select.Option>
+                        {userList.map((item, index) => {
+                            return <Select.Option key={index} value={item.refferal_code}>{item.name}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>
 
                 <Form.Item
                     className="form-in"
-                    name="hoten"
+                    name="gender"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng chọn giới tính',
+                        },
+                    ]}
+                >
+                    <Select
+                        showSearch
+                        placeholder="Giới Tính"
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {Genders.map((item, index) => {
+                            return <Select.Option key={index} value={item}>{item}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+
+                <Form.Item
+                    className="form-in"
+                    name="name"
                     rules={[
                         {
                             required: true,
@@ -69,7 +103,7 @@ export default function AddUser() {
 
                 <Form.Item
                     className="form-in"
-                    name="sodienthoai"
+                    name="phone"
                     rules={[
                         {
                             required: true,
@@ -91,7 +125,7 @@ export default function AddUser() {
                 </Form.Item>
                 <Form.Item
                     className="form-in"
-                    name="diachi"
+                    name="address"
                     rules={[
                         {
                             required: true,
@@ -103,7 +137,7 @@ export default function AddUser() {
                 </Form.Item>
                 <Form.Item
                     className="form-in"
-                    name="benhly"
+                    name="pathological"
                     rules={[
                         {
                             required: true,
@@ -115,9 +149,15 @@ export default function AddUser() {
                 </Form.Item>
                 <Form.Item
                     className="form-in"
-                    name="ghichu"
+                    name="note"
                 >
                     <Input placeholder="Nhập ghi chú của bệnh nhân" />
+                </Form.Item>
+                <Form.Item
+                    className="form-in"
+                    name="date_of_birth"
+                >
+                    <DatePicker placeholder='Ngày sinh' />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">Thêm Khách Hàng</Button>

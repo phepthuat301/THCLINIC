@@ -1,12 +1,9 @@
 import swal from 'sweetalert';
-import history from '../../utils/history'
 const initialState = {
     userList: [],
     userDetail: {},
-    email: null,
-    isLogged: false,
 };
-export default function adminReducer(state = initialState, action) {
+export default function userReducer(state = initialState, action) {
     switch (action.type) {
         case "ADD_USER_REQUEST":
             return {
@@ -40,7 +37,7 @@ export default function adminReducer(state = initialState, action) {
         case "GET_USER_SUCCESS":
             return {
                 ...state,
-                userList: action.payload,
+                userList: action.payload.data.data,
                 loading: false,
             };
         case "GET_USER_FAIL":
@@ -165,57 +162,6 @@ export default function adminReducer(state = initialState, action) {
                 error: action.payload,
             };
 
-        case "LOGIN_REQUEST":
-            return {
-                ...state,
-                loading: true,
-            };
-        case "LOGIN_SUCCESS":
-            if (action.payload.data === 'fail') {
-                swal("Sai Tài Khoản Hoặc Mật Khẩu", "", "error")
-                return {
-                    ...state,
-                    loading: false,
-                };
-            } else {
-                const newInfo = {
-                    token: action.payload.data.token,
-                }
-                localStorage.setItem('user', JSON.stringify(newInfo));
-                swal("Đăng nhập thành công!", {
-                    buttons: {
-                        dangnhap: {
-                            text: "Trang Chủ",
-                            value: true,
-                        },
-                    },
-                })
-                    .then((value) => {
-                        switch (value) {
-
-                            case "dangnhap":
-                                history.push("/")
-                                break;
-                            default:
-                                history.push("/")
-                        }
-                    });
-                return {
-                    ...state,
-                    check: true,
-                    email: action.payload.data.email,
-                    trangthai: action.payload.data.trangthai,
-                    loading: false,
-                };
-            }
-
-        case "LOGIN_FAIL":
-            return {
-                ...state,
-                loading: false,
-                error: action.payload,
-            };
-
         case "ADMIN_CHECK_REQUEST":
             return {
                 ...state,
@@ -245,14 +191,6 @@ export default function adminReducer(state = initialState, action) {
                 loading: false,
                 error: action.payload,
             };
-
-        case 'LOGOUT': {
-            localStorage.setItem('user', JSON.stringify({}));
-            history.push("/login")
-            return {
-                ...state,
-            };
-        }
 
         case "REMOVE_USER_ACTION":
             return {

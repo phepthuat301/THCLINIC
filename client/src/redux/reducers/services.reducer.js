@@ -116,7 +116,7 @@ export default function servicesReducer(state = initialState, action) {
         case 'GET_ACTIVE_SERVICES_SUCCESS':
             return {
                 ...state,
-                activeServicesList: action.payload,
+                activeServicesList: action.payload.data.data,
                 loading: false,
             };
 

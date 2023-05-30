@@ -1,17 +1,20 @@
 import axios from 'axios'
-const md5 = require('md5');
-const crypto = require('crypto')
+import { httpGet, httpPost } from '../../services/http.service';
+import { apiUrlV1 } from '../../utils/constant';
+
 export const addUserAction = (params) => async (dispatch) => {
   try {
     dispatch({ type: "ADD_USER_REQUEST" });
-    const data = await axios.post(`${process.env.REACT_APP_API_URL}/adduser`, {
-      hoten: params.hoten,
-      diachi: params.diachi,
-      sodienthoai: params.sodienthoai,
-      benhly: params.benhly,
-      ghichu: params.ghichu,
-      id_nguoigioithieu: params.id_nguoigioithieu,
-    });
+    const data = await httpPost(apiUrlV1.addUser, {
+      name: params.name,
+      date_of_birth: params.date_of_birth,
+      address: params.address,
+      note: params.note,
+      gender: params.gender,
+      pathological: params.pathological,
+      phone: params.phone,
+      referral_code: params.referral_code,
+    })
     dispatch({
       type: "ADD_USER_SUCCESS",
       payload: data,
@@ -27,10 +30,10 @@ export const addUserAction = (params) => async (dispatch) => {
   }
 };
 
-export const getUserAction = () => async (dispatch) => {
+export const getUserAction = (keyword, page, limit) => async (dispatch) => {
   try {
     dispatch({ type: "GET_USER_REQUEST" });
-    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
+    const data = await httpPost(apiUrlV1.getListUser, { keyword: keyword ?? "", page, limit })
     dispatch({
       type: "GET_USER_SUCCESS",
       payload: data,
@@ -103,68 +106,21 @@ export const updateUserAction = (params) => async (dispatch) => {
   }
 };
 
-export const createInvoiceAction = (IDKH,IDDV,diemtichluy) => async (dispatch) => {
+export const createInvoiceAction = (IDKH, IDDV, diemtichluy) => async (dispatch) => {
   try {
-      dispatch({ type: "CREATE_INVOICE_REQUEST" });
-      await axios.post(`${process.env.REACT_APP_API_URL}/createinvoice`, {
-          IDKH,
-          IDDV,
-          diemtichluy,
-      });
-      dispatch(getUserAction())
-      dispatch({
-          type: "CREATE_INVOICE_SUCCESS",
-      });
-  } catch (error) {
-      dispatch({
-          type: "CREATE_INVOICE_FAIL",
-          payload:
-              error.response && error.response.data.message
-                  ? error.response.data.message
-                  : error.message,
-      });
-  }
-};
-
-
-export const deleteUserAction = (id) => async (dispatch) => {
-  try {
-      dispatch({ type: "DELETE_USER_REQUEST" });
-      const { data } = await axios.delete(`${process.env.REACT_APP_API_URL}/deleteuser/${id}`);
-      const newData = {
-          data: data,
-          id: id,
-      }
-      dispatch({
-          type: "DELETE_USER_SUCCESS",
-          payload: newData,
-      });
-  } catch (error) {
-      dispatch({
-          type: "DELETE_USER_FAIL",
-          payload:
-              error.response && error.response.data.message
-                  ? error.response.data.message
-                  : error.message,
-      });
-  }
-}
-
-export const loginAction = (params) => async (dispatch) => {
-  try {
-    dispatch({ type: "LOGIN_REQUEST" });
-    const data = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
-      password: md5(params.password),
-      username: params.username,
-      token: crypto.randomBytes(20).toString('hex')
+    dispatch({ type: "CREATE_INVOICE_REQUEST" });
+    await axios.post(`${process.env.REACT_APP_API_URL}/createinvoice`, {
+      IDKH,
+      IDDV,
+      diemtichluy,
     });
+    dispatch(getUserAction())
     dispatch({
-      type: "LOGIN_SUCCESS",
-      payload: data,
+      type: "CREATE_INVOICE_SUCCESS",
     });
   } catch (error) {
     dispatch({
-      type: "LOGIN_FAIL",
+      type: "CREATE_INVOICE_FAIL",
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -172,6 +128,30 @@ export const loginAction = (params) => async (dispatch) => {
     });
   }
 };
+
+
+export const deleteUserAction = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: "DELETE_USER_REQUEST" });
+    const { data } = await axios.delete(`${process.env.REACT_APP_API_URL}/deleteuser/${id}`);
+    const newData = {
+      data: data,
+      id: id,
+    }
+    dispatch({
+      type: "DELETE_USER_SUCCESS",
+      payload: newData,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DELETE_USER_FAIL",
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+}
 
 export const adminCheckAction = (id) => async (dispatch) => {
   try {
@@ -191,12 +171,6 @@ export const adminCheckAction = (id) => async (dispatch) => {
     });
   }
 };
-
-export const logoutAction = () => {
-  return {
-    type: 'LOGOUT',
-  }
-}
 
 export const removeUserAction = () => {
   return {

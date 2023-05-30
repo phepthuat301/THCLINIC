@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { httpPost } from '../../services/http.service';
+import { apiUrlV1 } from '../../utils/constant';
 const md5 = require('md5');
 
 export const getAccountAction = () => async (dispatch) => {
@@ -116,14 +118,10 @@ export const getRoleAction = () => async (dispatch) => {
     }
 };
 
-export const updatePasswordAction = (oldPass, newPass, email) => async (dispatch) => {
+export const updatePasswordAction = (oldPass, newPass) => async (dispatch) => {
     try {
         dispatch({ type: "UPDATE_PASSWORD_REQUEST" });
-        const data = await axios.put(`${process.env.REACT_APP_API_URL}/updatepassword`, {
-            oldPass: md5(oldPass),
-            newPass: md5(newPass),
-            email,
-        });
+        const data = await httpPost(apiUrlV1.changePassword, { password: oldPass, passwordNew: newPass })
         dispatch({
             type: "UPDATE_PASSWORD_SUCCESS",
             payload: data,
@@ -142,5 +140,30 @@ export const updatePasswordAction = (oldPass, newPass, email) => async (dispatch
 export const removeAccountAction = () => {
     return {
         type: 'REMOVE_ACCOUNT_ACTION',
+    }
+}
+
+export const loginAction = (params) => async (dispatch) => {
+    try {
+        dispatch({ type: "LOGIN_REQUEST" });
+        const data = await httpPost(apiUrlV1.login, { email: params.email, password: params.password })
+        dispatch({
+            type: "LOGIN_SUCCESS",
+            payload: { ...data, email: params.email },
+        });
+    } catch (error) {
+        dispatch({
+            type: "LOGIN_FAIL",
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+export const logoutAction = () => {
+    return {
+        type: 'LOGOUT',
     }
 }

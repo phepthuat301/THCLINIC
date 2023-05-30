@@ -5,14 +5,14 @@ import { useDispatch } from "react-redux";
 import { updatePasswordAction } from '../redux/actions';
 
 export default function ResetPWD(props) {
-    const { email, setIsModalVisible } = props
+    const { setIsModalVisible } = props
     const dispatch = useDispatch();
     const [newForm] = Form.useForm();
     return (
         <>
             <Form
-                onFinish={ (values) => {dispatch(updatePasswordAction(values.oldPass, values.newPass, email));setIsModalVisible(false);newForm.resetFields()} }
-                form = {newForm}
+                onFinish={(values) => { dispatch(updatePasswordAction(values.oldPass, values.newPass)); setIsModalVisible(false); newForm.resetFields() }}
+                form={newForm}
             >
                 <Form.Item
                     name="oldPass"

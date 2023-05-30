@@ -14,11 +14,10 @@ import {
 
 //REDUX && REACT
 import { useSelector, useDispatch } from "react-redux";
-import { adminCheckAction, get30daysAction, logoutAction } from '../../redux/actions';
 
 //Components
 import ResetPWD from '../resetPwdForm';
-import swal from 'sweetalert';
+import { logoutAction } from '../../redux/actions';
 
 const { Header, Content, Sider } = Layout;
 function DefaultLayout(props) {
@@ -31,7 +30,7 @@ function DefaultLayout(props) {
 
     document.title = "Quản Lý | Thiện Hiếu"
 
-    const getAdminInfo = useSelector((state) => state.adminReducer);
+    const getAdminInfo = useSelector((state) => state.accountReducer);
     const { email, isLogged } = getAdminInfo;
     // useEffect(() => {
     // dispatch(get30daysAction())
@@ -87,7 +86,7 @@ function DefaultLayout(props) {
                                     <Button style={{ marginLeft: '50px' }} onClick={() => { dispatch(logoutAction()) }} type="ghost">Đăng Xuất</Button>
                                     <Button style={{ marginLeft: '50px' }} onClick={() => setIsModalVisible(true)} type="ghost">Đổi Mật Khẩu</Button>
                                     <Modal title="Đổi Mật Khẩu" visible={isModalVisible} footer={null} onCancel={handleCancel}>
-                                        <ResetPWD email={email} setIsModalVisible={setIsModalVisible} />
+                                        <ResetPWD setIsModalVisible={setIsModalVisible} />
                                     </Modal>
                                 </Menu>
 

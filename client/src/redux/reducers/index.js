@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import adminReducer from './admin.reducer';
+import userReducer from './user.reducer';
 import servicesReducer from './services.reducer';
 import statisticReducer from './statistic.reducer';
 import accountReducer from './account.reducer'
 export default combineReducers({
-  adminReducer: adminReducer,
+  userReducer: userReducer,
   servicesReducer: servicesReducer,
   statisticReducer: statisticReducer,
   accountReducer: accountReducer,
