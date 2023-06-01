@@ -1,18 +1,18 @@
 import axios from 'axios'
-import { httpGet, httpPost } from '../../services/http.service';
+import { httpDelete, httpPost } from '../../services/http.service';
 import { apiUrlV1 } from '../../utils/constant';
 
 export const addServicesAction = (params) => async (dispatch) => {
     try {
         dispatch({ type: "ADD_SERVICES_REQUEST" });
-        const data = await axios.post(`${process.env.REACT_APP_API_URL}/addservices`, {
-            tendv: params.tendv,
-            giadv: params.giadv,
-            madv: params.madv,
-            solandieutri: params.solandieutri,
-            trangthai: params.trangthai,
-            giatichluy: params.giatichluy,
-        });
+        const data = await httpPost(apiUrlV1.addItem, {
+            name: params.name,
+            price: params.price,
+            reward_point: params.reward_point,
+            number_of_treatments: params.number_of_treatments,
+            payment_method: params.payment_method,
+            code: params.code,
+        })
         dispatch({
             type: "ADD_SERVICES_SUCCESS",
             payload: data,
@@ -29,16 +29,21 @@ export const addServicesAction = (params) => async (dispatch) => {
 };
 
 
-export const getServicesAction = () => async (dispatch) => {
+export const getServicesAction = (keyword, page, limit) => async (dispatch) => {
     try {
         dispatch({ type: "GET_SERVICES_REQUEST" });
 
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/services`);
+        const { data } = await httpPost(apiUrlV1.getListItem, {
+            keyword: keyword ?? '',
+            page,
+            limit
+        })
 
         dispatch({
             type: "GET_SERVICES_SUCCESS",
             payload: data,
         });
+
     } catch (error) {
         dispatch({
             type: "GET_SERVICES_FAIL",
@@ -95,10 +100,14 @@ export const getServicesHistoryAction = () => async (dispatch) => {
 export const updateServicesAction = (params) => async (dispatch) => {
     try {
         dispatch({ type: "UPDATE_SERVICES_REQUEST" });
-        await axios.put(`${process.env.REACT_APP_API_URL}/updateservices`, {
-            id_dichvu: params.id_dichvu,
-            trangthai: params.trangthai,
-        });
+        await httpPost(apiUrlV1.updateItem, {
+            id: params.id,
+            name: params.name,
+            status: params.status,
+            price: params.price,
+            reward_point: params.reward_point,
+            number_of_treatments: params.number_of_treatments
+        })
         dispatch({
             type: "UPDATE_SERVICES_SUCCESS",
             payload: params,
@@ -116,8 +125,9 @@ export const updateServicesAction = (params) => async (dispatch) => {
 
 export const deleteServiceAction = (id) => async (dispatch) => {
     try {
+        console.log(id)
         dispatch({ type: "DELETE_SERVICE_REQUEST" });
-        const { data } = await axios.delete(`${process.env.REACT_APP_API_URL}/deleteservice/${id}`);
+        const { data } = await httpDelete(`${apiUrlV1.deleteItem}/${id}`)
         const newData = {
             data: data,
             id: id,

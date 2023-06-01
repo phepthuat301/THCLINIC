@@ -1,7 +1,6 @@
 import swal from 'sweetalert';
 const initialState = {
     servicesList: [],
-    serviceDetail: {},
     serviceHistory: [],
     activeServicesList: [],
     orderList: [],
@@ -42,7 +41,7 @@ export default function servicesReducer(state = initialState, action) {
         case 'GET_SERVICES_SUCCESS':
             return {
                 ...state,
-                servicesList: action.payload,
+                servicesList: action.payload.data,
                 loading: false,
             };
 
@@ -90,8 +89,12 @@ export default function servicesReducer(state = initialState, action) {
         case 'UPDATE_SERVICES_SUCCESS':
             const newServicesList = state.servicesList
             newServicesList.forEach(item => {
-                if (item.id_dichvu === parseInt(action.payload.id_dichvu)) {
-                    item.trangthai = action.payload.trangthai
+                if (item.id === action.payload.id) {
+                    item.status = action.payload.status
+                    item.name = action.payload.name
+                    item.reward_point = action.payload.reward_point
+                    item.price = action.payload.price
+                    item.number_of_treatments = action.payload.number_of_treatments
                 }
             })
             return {
@@ -140,7 +143,7 @@ export default function servicesReducer(state = initialState, action) {
                     loading: false,
                 };
             } else {
-                const newServiceList = state.servicesList.filter(item => item.id_dichvu !== action.payload.id)
+                const newServiceList = state.servicesList.filter(item => item.id !== action.payload.id)
                 swal("Xóa Dịch Vụ Thành Công", "", "success");
                 return {
                     ...state,
@@ -149,6 +152,7 @@ export default function servicesReducer(state = initialState, action) {
                 };
             }
         case "DELETE_SERVICE_FAIL":
+            swal(`${action.payload}`, "", 'error')
             return {
                 ...state,
                 loading: false,

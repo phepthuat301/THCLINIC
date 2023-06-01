@@ -1,12 +1,24 @@
 import { Form, Input, Button, Select, Row, Col, InputNumber } from 'antd';
+import { useState } from 'react';
 //REACT && REDUX
 import { useDispatch } from "react-redux";
 import { addServicesAction } from '../../../redux/actions';
+import { itemPaymentEnum } from '../../../utils/constant';
 
 export default function AddServices() {
+    const [payment, setPayment] = useState(itemPaymentEnum.MONEY);
     const dispatch = useDispatch();
     function addServices(value) {
+        if (payment === itemPaymentEnum.MONEY) {
+            delete value.reward_point;
+        }
+        if (payment === itemPaymentEnum.POINT) {
+            delete value.money;
+        }
         dispatch(addServicesAction(value));
+    }
+    const onSelectChange = (value) => {
+        setPayment(value)
     }
     return (
         <Row style={{ marginTop: '30px' }}>
@@ -27,7 +39,7 @@ export default function AddServices() {
 
                         className="form-in"
                         label="Tên Dịch Vụ: "
-                        name="tendv"
+                        name="name"
                         rules={[
                             {
                                 required: true,
@@ -38,10 +50,9 @@ export default function AddServices() {
                         <Input placeholder="Nhập tên dịch vụ..." />
                     </Form.Item>
                     <Form.Item
-
                         className="form-in"
                         label="Mã Dịch Vụ: "
-                        name="madv"
+                        name="code"
                         rules={[
                             {
                                 required: true,
@@ -52,33 +63,29 @@ export default function AddServices() {
                         <Input placeholder="Mã dịch vụ nên là các chữ cái đầu của tên dịch vụ..." />
                     </Form.Item>
                     <Form.Item
-
-                        label="Trạng Thái"
-                        name="trangthai"
+                        label="Loại Thanh Toán"
+                        name="payment_method"
                         rules={[
                             {
                                 required: true,
-                                message: 'Vui lòng chọn trạng thái...',
+                                message: 'Vui lòng chọn hình thức thanh toán...',
                             },
                         ]}
                     >
-                        <Select placeholder="Chọn trạng thái...">
-                            <Select.Option value="1">Kích Hoạt</Select.Option>
-                            <Select.Option value="0">Không Kích Hoạt</Select.Option>
+                        <Select
+                            onChange={(value) => onSelectChange(value)}
+                            placeholder="Hình thức thanh toán..."
+                        >
+                            <Select.Option value={itemPaymentEnum.MONEY}>VNĐ</Select.Option>
+                            <Select.Option value={itemPaymentEnum.POINT}>Điểm</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item
                         label="Giá Dịch Vụ: "
-                        name="giadv"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập giá dịch vụ...',
-                            },
-
-                        ]}
+                        name="price"
                     >
                         <InputNumber
+                            disabled={payment === itemPaymentEnum.POINT}
                             style={{ width: 500 }}
                             min={0}
                             max={10000000}
@@ -89,9 +96,10 @@ export default function AddServices() {
 
                     <Form.Item
                         label="Điểm tích lũy: "
-                        name="giatichluy"
+                        name="reward_point"
                     >
                         <InputNumber
+                            disabled={payment === itemPaymentEnum.MONEY}
                             style={{ width: 500 }}
                             min={0}
                             max={1000}
@@ -102,7 +110,7 @@ export default function AddServices() {
 
                     <Form.Item
                         label="Số Lần Điều Trị: "
-                        name="solandieutri"
+                        name="number_of_treatments"
                         rules={[
                             {
                                 required: true,

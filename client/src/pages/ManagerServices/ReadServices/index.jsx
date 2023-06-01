@@ -4,14 +4,18 @@ import swal from 'sweetalert';
 //REACT && REDUX
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react';
-import { deleteServiceAction, getServicesAction, getServicesDetailAction, removeServicesAction, updateServicesAction } from '../../../redux/actions';
+import { deleteServiceAction, getServicesAction, removeServicesAction, updateServicesAction } from '../../../redux/actions';
+import { itemPaymentEnum, itemStatusEnum } from '../../../utils/constant';
 
 export default function ReadServices() {
     const dispatch = useDispatch();
     const getAdminContent = useSelector(state => state.servicesReducer);
-    const { servicesList, serviceDetail } = getAdminContent;
+    const { servicesList } = getAdminContent;
     const [visible, setVisible] = useState(false);
+    const [serviceDetail, setServiceDetail] = useState({});
+    const [payment, setPayment] = useState(itemPaymentEnum.MONEY);
     const [newsForm] = Form.useForm()
+
     useEffect(() => {
         dispatch(getServicesAction());
         return () => {
@@ -21,17 +25,18 @@ export default function ReadServices() {
 
     useEffect(() => {
         newsForm.resetFields();
-    }, [serviceDetail.id_dichvu,newsForm])
+    }, [serviceDetail.id, newsForm])
 
-    const showDrawer = (id) => {
-        dispatch(getServicesDetailAction(id));
+    const showDrawer = (item) => {
+        setServiceDetail(item)
+        setPayment(item.payment)
         setVisible(true);
     };
 
     function editServices(value) {
         const newValue = {
             ...value,
-            id_dichvu: serviceDetail.id_dichvu,
+            id: serviceDetail.id,
         }
         setVisible(false);
         dispatch(updateServicesAction(newValue))
@@ -41,7 +46,8 @@ export default function ReadServices() {
         setVisible(false);
     };
 
-    function deleteService(id_dichvu) {
+    function deleteService(id) {
+        console.log(id)
         swal({
             title: "Bạn Có Chắc Chắn Không?",
             text: "Một khi xóa, bạn sẽ không thể khôi phục lại file này",
@@ -51,7 +57,7 @@ export default function ReadServices() {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    dispatch(deleteServiceAction(id_dichvu))
+                    dispatch(deleteServiceAction(id))
                 } else {
                     swal("Dữ Liệu Của Bạn Đã Được Bảo Toàn!");
                 }
@@ -59,43 +65,43 @@ export default function ReadServices() {
     }
     //Kiến Trúc Bảng
     const columns = [
-        { title: 'Tên Dịch Vụ', dataIndex: 'tendichvu', key: 'tendichvu' },
-        { title: 'Mã Dịch Vụ', dataIndex: 'madichvu', key: 'madichvu' },
+        { title: 'Tên Dịch Vụ', dataIndex: 'name', key: 'name' },
+        { title: 'Mã Dịch Vụ', dataIndex: 'code', key: 'code' },
         {
             title: 'Giá Tiền',
-            key: 'giatien',
+            key: 'price',
             render: (record) => (
-                record.giatien.toLocaleString('vi-VN') + " VNĐ"
+                record.price.toLocaleString('vi-VN') + " VNĐ"
             ),
         },
         {
             title: 'Giá Điểm Tích Lũy',
-            key: 'giatichluy',
+            key: 'reward_point',
             render: (record) => (
                 <>
                     {record.giatichluy ? (
-                        record.giatichluy.toLocaleString('vi-VN') + " Điểm"
-                    ):(
+                        record.reward_point.toLocaleString('vi-VN') + " Điểm"
+                    ) : (
                         "Không"
                     )}
                 </>
             ),
         },
-        { title: 'Số Lần Điều Trị', dataIndex: 'solandieutri', key: 'solandieutri' },
+        { title: 'Số Lần Điều Trị', dataIndex: 'number_of_treatments', key: 'number_of_treatments' },
         {
             title: 'Trạng Thái',
-            key: 'trangthai',
+            key: 'status',
             render: (record) => (
-                record.trangthai === 1 ? "Kích Hoạt" : "Không Kích Hoạt"
+                record.status === itemStatusEnum.ACTIVE ? "Kích Hoạt" : "Không Kích Hoạt"
             ),
         },
         {
             title: 'Action',
-            key: 'id_dichvu',
+            key: 'id',
             render: (record) => (
                 <Space size="middle">
-                    <EditTwoTone twoToneColor="#eb2f96" onClick={() => showDrawer(record.id_dichvu)} style={{ fontSize: '25px', marginLeft: '20px' }} />
-                    <DeleteTwoTone onClick={() => deleteService(record.id_dichvu)} twoToneColor='red' style={{ fontSize: '25px' }} />
+                    <EditTwoTone twoToneColor="#eb2f96" onClick={() => showDrawer(record)} style={{ fontSize: '25px', marginLeft: '20px' }} />
+                    <DeleteTwoTone onClick={() => deleteService(record.id)} twoToneColor='red' style={{ fontSize: '25px' }} />
                 </Space>
             ),
         },
@@ -111,7 +117,7 @@ export default function ReadServices() {
                 </Col>
             </Row>
             <Drawer
-                title="Basic Drawer"
+                title="Sửa dịch vụ"
                 width={720}
                 closable={false}
                 onClose={onClose}
@@ -120,11 +126,13 @@ export default function ReadServices() {
                 <Form
                     layout="vertical"
                     initialValues={{
-                        tendv: serviceDetail?.tendichvu,
-                        madv: serviceDetail?.madichvu,
-                        trangthai: serviceDetail?.trangthai,
-                        giadv: serviceDetail?.giatien,
-                        solandieutri: serviceDetail?.solandieutri,
+                        name: serviceDetail?.name,
+                        code: serviceDetail?.code,
+                        status: serviceDetail?.status,
+                        price: serviceDetail?.price,
+                        reward_point: serviceDetail?.reward_point ?? 0,
+                        number_of_treatments: serviceDetail?.number_of_treatments,
+                        payment: serviceDetail?.payment,
                     }}
                     onFinish={editServices}
                     scrollToFirstError
@@ -135,7 +143,7 @@ export default function ReadServices() {
 
                         className="form-in"
                         label="Tên Dịch Vụ: "
-                        name="tendv"
+                        name="name"
                         rules={[
                             {
                                 required: true,
@@ -143,13 +151,13 @@ export default function ReadServices() {
                             },
                         ]}
                     >
-                        <Input disabled placeholder="Nhập tên dịch vụ..." />
+                        <Input placeholder="Nhập tên dịch vụ..." />
                     </Form.Item>
                     <Form.Item
 
                         className="form-in"
                         label="Mã Dịch Vụ: "
-                        name="madv"
+                        name="code"
                         rules={[
                             {
                                 required: true,
@@ -162,7 +170,7 @@ export default function ReadServices() {
                     <Form.Item
 
                         label="Trạng Thái"
-                        name="trangthai"
+                        name="status"
                         rules={[
                             {
                                 required: true,
@@ -171,13 +179,31 @@ export default function ReadServices() {
                         ]}
                     >
                         <Select placeholder="Chọn trạng thái...">
-                            <Select.Option value={1}>Kích Hoạt</Select.Option>
-                            <Select.Option value={0}>Không Kích Hoạt</Select.Option>
+                            <Select.Option value={itemStatusEnum.ACTIVE}>Kích Hoạt</Select.Option>
+                            <Select.Option value={itemStatusEnum.INACTIVE}>Không Kích Hoạt</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Loại Thanh Toán"
+                        name="payment"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng chọn hình thức thanh toán...',
+                            },
+                        ]}
+                    >
+                        <Select
+                            placeholder="Hình thức thanh toán..."
+                            disabled
+                        >
+                            <Select.Option value={itemPaymentEnum.MONEY}>VNĐ</Select.Option>
+                            <Select.Option value={itemPaymentEnum.POINT}>Điểm</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item
                         label="Giá Dịch Vụ: "
-                        name="giadv"
+                        name="price"
                         rules={[
                             {
                                 required: true,
@@ -190,15 +216,29 @@ export default function ReadServices() {
                             style={{ width: 500 }}
                             min={1}
                             max={10000000}
-                            formatter={value =>`VNĐ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            formatter={value => `VNĐ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value.replace(/VNĐ\s?|(,*)/g, '')}
-                            disabled
+                            disabled={payment === itemPaymentEnum.POINT}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Điểm tích lũy: "
+                        name="reward_point"
+                    >
+                        <InputNumber
+                            style={{ width: 500 }}
+                            min={0}
+                            max={1000}
+                            formatter={value => `Điểm ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/Điểm\s?|(,*)/g, '')}
+                            disabled={payment === itemPaymentEnum.MONEY}
                         />
                     </Form.Item>
 
                     <Form.Item
                         label="Số Lần Điều Trị: "
-                        name="solandieutri"
+                        name="number_of_treatments"
                         rules={[
                             {
                                 required: true,
@@ -211,7 +251,6 @@ export default function ReadServices() {
                             style={{ width: 500 }}
                             min={1}
                             max={10}
-                            disabled
                         />
                     </Form.Item>
                     <Form.Item>
