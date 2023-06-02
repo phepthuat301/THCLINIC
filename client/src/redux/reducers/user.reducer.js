@@ -1,7 +1,6 @@
 import swal from 'sweetalert';
 const initialState = {
     userList: [],
-    userDetail: {},
 };
 export default function userReducer(state = initialState, action) {
     switch (action.type) {
@@ -108,6 +107,7 @@ export default function userReducer(state = initialState, action) {
                 loading: false,
             };
         case "UPDATE_USER_FAIL":
+            swal(action.payload, "", "error")
             return {
                 ...state,
                 loading: false,
@@ -128,6 +128,7 @@ export default function userReducer(state = initialState, action) {
             };
 
         case "CREATE_INVOICE_FAIL":
+            swal(action.payload, "", "error")
             return {
                 ...state,
                 loading: false,

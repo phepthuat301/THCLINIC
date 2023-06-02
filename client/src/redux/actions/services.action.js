@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { httpDelete, httpPost } from '../../services/http.service';
-import { apiUrlV1 } from '../../utils/constant';
+import { apiUrlV1, itemStatusEnum } from '../../utils/constant';
 
 export const addServicesAction = (params) => async (dispatch) => {
     try {
@@ -60,10 +60,10 @@ export const getActiveServicesAction = (keyword, page, limit) => async (dispatch
         dispatch({ type: "GET_ACTIVE_SERVICES_REQUEST" });
 
         const data = await httpPost(apiUrlV1.getListItem, { keyword: keyword ?? '', page, limit });
-
+        const filterData = data.data.data.filter(item => item.status === itemStatusEnum.ACTIVE);
         dispatch({
             type: "GET_ACTIVE_SERVICES_SUCCESS",
-            payload: data,
+            payload: filterData,
         });
     } catch (error) {
         dispatch({

@@ -12,6 +12,8 @@ export const apiUrlV1 = {
     addItem: "v1/items/create",
     updateItem: "v1/items/edit",
     deleteItem: "v1/items/delete",
+    updateUser: "v1/customers/edit",
+    addOrder: "v1/orders/create",
 };
 
 export const Genders = [

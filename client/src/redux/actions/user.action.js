@@ -84,13 +84,13 @@ export const updateDieutriAction = (id, num, id_kh, storageNum) => async (dispat
 export const updateUserAction = (params) => async (dispatch) => {
   try {
     dispatch({ type: "UPDATE_USER_REQUEST" });
-    await axios.put(`${process.env.REACT_APP_API_URL}/updateuser`, {
-      id_khachhang: params.id_khachhang,
-      hoten: params.hoten,
-      diachi: params.diachi,
-      benhly: params.benhly,
-      ghichu: params.ghichu,
-    });
+    await httpPost(apiUrlV1.updateUser, {
+      name: params.name,
+      address: params.address,
+      phone: params.phone,
+      note: params.note,
+      pathological: params.pathological
+    })
     dispatch({
       type: "UPDATE_USER_SUCCESS",
       payload: params,
@@ -106,14 +106,10 @@ export const updateUserAction = (params) => async (dispatch) => {
   }
 };
 
-export const createInvoiceAction = (IDKH, IDDV, diemtichluy) => async (dispatch) => {
+export const createInvoiceAction = (IDKH, IDDV, paid) => async (dispatch) => {
   try {
     dispatch({ type: "CREATE_INVOICE_REQUEST" });
-    await axios.post(`${process.env.REACT_APP_API_URL}/createinvoice`, {
-      IDKH,
-      IDDV,
-      diemtichluy,
-    });
+    await httpPost(apiUrlV1.addOrder, { client_id: IDKH, item_id: IDDV, paid })
     dispatch(getUserAction())
     dispatch({
       type: "CREATE_INVOICE_SUCCESS",

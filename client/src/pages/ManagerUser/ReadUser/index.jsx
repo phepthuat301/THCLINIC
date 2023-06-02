@@ -5,22 +5,23 @@ import swal from 'sweetalert';
 //REACT && REDUX
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { createInvoiceAction, deleteUserAction, getActiveServicesAction, getUserAction, getUserDetailAction, removeServicesAction, removeUserAction, updateDieutriAction, updateUserAction } from "../../../redux/actions";
+import { createInvoiceAction, deleteUserAction, getActiveServicesAction, getUserAction, removeServicesAction, removeUserAction, updateDieutriAction, updateUserAction } from "../../../redux/actions";
 
 
 
 export default function ReadUser() {
     //STATE
     const [visible, setVisible] = useState(false);
-    const [IDKH, setIDKH] = useState(null);
     const [IDDV, setIDDV] = useState(null);
+    const [userDetail, setUserDetail] = useState({});
     ////
     const [newsForm] = Form.useForm()
     const dispatch = useDispatch();
     const getAdminContent = useSelector(state => state.userReducer);
-    const { userList, userDetail } = getAdminContent;
+    const { userList } = getAdminContent;
     const getServicesContent = useSelector(state => state.servicesReducer);
     const { activeServicesList } = getServicesContent;
+
     useEffect(() => {
         dispatch(getUserAction());
         dispatch(getActiveServicesAction())
@@ -30,22 +31,26 @@ export default function ReadUser() {
         }
     }, [dispatch]);
 
+
     useEffect(() => {
         newsForm.resetFields();
-    }, [userDetail.id_khachhang, newsForm])
+    }, [userDetail, newsForm])
+
+    const onSubmitSearch = (value) => {
+        dispatch(getUserAction(value));
+    }
 
     function editUser(value) {
         const newValue = {
             ...value,
-            id_khachhang: userDetail.id_khachhang
+            id: userDetail.id
         }
         dispatch(updateUserAction(newValue))
         setVisible(false);
     }
 
-    const showDrawer = (id) => {
-        setIDKH(id);
-        dispatch(getUserDetailAction(id));
+    const showDrawer = (item) => {
+        setUserDetail(item);
         setVisible(true);
     };
 
@@ -53,24 +58,10 @@ export default function ReadUser() {
         setVisible(false);
     };
     userList.forEach(item => {
-        item.key = item.id_khachhang
+        item.key = item.id
     })
     function createInvoice() {
-        const newServices = activeServicesList.filter(item => item.id_dichvu === IDDV);
-        const newCustomer = userList.filter(item => item.id_khachhang === IDKH)
-        if (newServices[0].giatichluy && (newCustomer[0].diemtichluy >= newServices[0].giatichluy)) {
-            dispatch(createInvoiceAction(IDKH, IDDV, newCustomer[0].diemtichluy - newServices[0].giatichluy))
-        }
-        if (newServices[0].giatichluy && (newCustomer[0].diemtichluy < newServices[0].giatichluy)) {
-            swal("Đổi Dịch Vụ Thất Bại", "Khách Hàng Chưa Đủ Điểm Thưởng Để Đổi Dịch Vụ", "warning")
-        }
-        if (!newServices[0].giatichluy) {
-            if (IDDV === null) {
-                swal("Vui lòng chọn dịch vụ", "", "warning")
-            } else {
-                dispatch(createInvoiceAction(IDKH, IDDV))
-            }
-        }
+        dispatch(createInvoiceAction(userDetail.id, IDDV, 0))
     }
     ////////////////////////
 
@@ -100,7 +91,7 @@ export default function ReadUser() {
     }
     const columns = [
 
-        { title: 'Ngày Đăng Ký', dataIndex: 'createdAt', key: 'createdAt' },
+        { title: 'Ngày Đăng Ký', dataIndex: 'created_at', key: 'created_at' },
         { title: 'Điểm Tích Lũy', dataIndex: 'reward_point', key: 'reward_point' },
         // { title: 'Người Giới Thiệu', dataIndex: 'nguoigioithieu', key: 'nguoigioithieu' },
         { title: 'Họ Tên', dataIndex: 'name', key: 'name' },
@@ -110,11 +101,11 @@ export default function ReadUser() {
         { title: 'Ghi Chú', dataIndex: 'note', key: 'note' },
         {
             title: 'Action',
-            key: 'id_khachhang',
+            key: 'id',
             render: (record) => (
                 <Space size="middle">
-                    <EditTwoTone twoToneColor="#eb2f96" onClick={() => showDrawer(record.id_khachhang)} style={{ fontSize: '25px', marginLeft: '20px' }} />
-                    <DeleteTwoTone onClick={() => deleteUser(record.id_khachhang)} twoToneColor='red' style={{ fontSize: '25px' }} />
+                    <EditTwoTone twoToneColor="#eb2f96" onClick={() => showDrawer(record)} style={{ fontSize: '25px', marginLeft: '20px' }} />
+                    <DeleteTwoTone onClick={() => deleteUser(record.id)} twoToneColor='red' style={{ fontSize: '25px' }} />
                 </Space>
             ),
         },
@@ -123,26 +114,21 @@ export default function ReadUser() {
     function updateDieutri(id, num, id_kh, storageNum) {
         dispatch(updateDieutriAction(id, num, id_kh, storageNum))
     }
-    ///////// SEARCH
-    const [searchKey, setSearchKey] = useState('')
-    const filterUserList = userList.filter((item) => {
-        return item.name.trim().toLowerCase().indexOf(searchKey.trim().toLowerCase()) !== -1 || item.phone.trim().indexOf(searchKey.trim()) !== -1;
-    });
 
     const newCollums = [
-        { title: 'Tên Dịch Vụ', dataIndex: 'tendichvu', key: 'tendichvu' },
-        { title: 'Mã Dịch Vụ', dataIndex: 'madichvu', key: 'madichvu' },
-        { title: 'Số Lần Điều Trị', dataIndex: 'solandieutri', key: 'solandieutri' },
+        { title: 'Tên Dịch Vụ', dataIndex: 'item_name', key: 'item_name' },
+        { title: 'Mã Dịch Vụ', dataIndex: 'item_code', key: 'item_code' },
+        { title: 'Số Lần Điều Trị', dataIndex: 'total_treatment', key: 'total_treatment' },
         {
             title: 'Số Lần Đã Điều Trị',
-            key: 'solandadieutri',
+            key: 'treatment_progress',
             render: (record) => (
                 <Space size="middle">
-                    {displayCheckBox(record.solandadieutri).map((item, index) => {
+                    {displayCheckBox(record.treatment_progress).map((item, index) => {
                         return <Checkbox defaultChecked disabled key={index} />
                     })}
-                    {displayCheckBox(record.solandieutri - record.solandadieutri).map((item, index) => {
-                        return <Checkbox onChange={() => updateDieutri(record.id_donhang, record.solandadieutri + 1, record.id_khachhang, record.diemtichluy + 1)} key={index} />
+                    {displayCheckBox(record.total_treatment - record.treatment_progress).map((item, index) => {
+                        return <Checkbox onChange={() => updateDieutri(record.id, record.total_treat + 1, record.id_khachhang, record.reward_point + 1)} key={index} />
                     })}
                 </Space>
             ),
@@ -150,8 +136,8 @@ export default function ReadUser() {
     ];
 
     userList.forEach(item => {
-        item.getTime = new Date(item.createdAt).getTime();
-        item.createdAt = item.createdAt.replace("T", " ").substr(0, 19)
+        item.getTime = new Date(item.created_at).getTime();
+        item.created_at = item.created_at.replace("T", " ").substr(0, 19)
     })
     return (
         <>
@@ -164,15 +150,18 @@ export default function ReadUser() {
                         allowClear
                         enterButton="Tìm Kiếm"
                         size="large"
-                        onSearch={(value) => setSearchKey(value)}
+                        onSearch={(value) => onSubmitSearch(value)}
                     />
                 </div>
                 <Col span={22} offset={1}>
-                    <Table dataSource={filterUserList} columns={columns} pagination={{ position: ['bottomCenter'] }}
-                        // expandable={{
-                        //     expandedRowRender: record => <Table style={{ marginBottom: '50px' }} columns={newCollums} dataSource={record.historyList} pagination={false} />,
-                        //     rowExpandable: record => record.historyList[0]?.tendichvu,
-                        // }}
+                    <Table
+                        dataSource={userList}
+                        columns={columns}
+                        pagination={{ position: ['bottomCenter'] }}
+                        expandable={{
+                            expandedRowRender: record => <Table style={{ marginBottom: '50px' }} columns={newCollums} dataSource={record.orders} pagination={false} />,
+                            rowExpandable: record => record.orders[0]?.item_name,
+                        }}
                     />
                 </Col>
             </Row>
@@ -189,11 +178,11 @@ export default function ReadUser() {
                     style={{ borderBottom: "1px solid #f0f0f0" }}
                     form={newsForm}
                     initialValues={{
-                        hoten: userDetail?.hoten,
-                        sodienthoai: userDetail?.sodienthoai,
-                        diachi: userDetail?.diachi,
-                        benhly: userDetail?.benhly,
-                        ghichu: userDetail?.ghichu,
+                        name: userDetail?.name,
+                        phone: userDetail?.phone,
+                        address: userDetail?.address,
+                        pathological: userDetail?.pathological,
+                        note: userDetail?.note,
                     }}
                     layout="vertical"
                     onFinish={editUser}
@@ -202,7 +191,7 @@ export default function ReadUser() {
                     <Form.Item
                         className="form-in"
                         label="Tên Khách Hàng"
-                        name="hoten"
+                        name="name"
                         rules={[
                             {
                                 required: true,
@@ -216,7 +205,7 @@ export default function ReadUser() {
                     <Form.Item
                         className="form-in"
                         label="Số Điện Thoại"
-                        name="sodienthoai"
+                        name="phone"
                         rules={[
                             {
                                 required: true,
@@ -234,12 +223,12 @@ export default function ReadUser() {
                             }
                         ]}
                     >
-                        <Input disabled placeholder="Nhập số điện thoại" addonBefore="+84" style={{ width: '100%' }} minLength="9" maxLength="10" />
+                        <Input placeholder="Nhập số điện thoại" addonBefore="+84" style={{ width: '100%' }} minLength="9" maxLength="10" />
                     </Form.Item>
                     <Form.Item
                         className="form-in"
                         label="Địa Chỉ"
-                        name="diachi"
+                        name="address"
                         rules={[
                             {
                                 required: true,
@@ -252,7 +241,7 @@ export default function ReadUser() {
                     <Form.Item
                         className="form-in"
                         label="Bệnh Lý"
-                        name="benhly"
+                        name="pathological"
                         rules={[
                             {
                                 required: true,
@@ -265,13 +254,7 @@ export default function ReadUser() {
                     <Form.Item
                         className="form-in"
                         label="Ghi Chú"
-                        name="ghichu"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập ghi chú!',
-                            },
-                        ]}
+                        name="note"
                     >
                         <Input placeholder="Nhập ghi chú của bệnh nhân" />
                     </Form.Item>
@@ -292,7 +275,7 @@ export default function ReadUser() {
                     onChange={(value) => setIDDV(value)}
                 >
                     {activeServicesList.map((item, index) => {
-                        return <Select.Option key={index} value={item.id_dichvu}>{item.tendichvu}</Select.Option>
+                        return <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
                     })}
                 </Select>
                 <br />
